@@ -19,5 +19,4 @@ def check_pnr(pnr):
         else:
             mult = 2
         total += dsum(pnr[i], mult)
-    return (roundup(total))
-check_pnr([7,2,0,1,2,3,1,2,3,5])
+    return (roundup(total) - total) == pnr[9]
