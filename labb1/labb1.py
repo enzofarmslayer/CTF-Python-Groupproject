@@ -20,4 +20,3 @@ def max(*numbers):
             ev = num
     return ev
 
-print(max())
