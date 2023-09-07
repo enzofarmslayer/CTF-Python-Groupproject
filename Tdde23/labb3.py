@@ -1,9 +1,14 @@
 import math
+import sys
+
+sys.setrecursionlimit(2000)
 
 board = {
-    (200,200) : 'player1',
-    (300,100) : 'player1',
+
 }
+    
+def new_board():
+    return {}
 
 def is_free(board, x, y):
     if (x,y) in board:
@@ -86,19 +91,3 @@ def nearest_piece(board, x, y):
     closest = keyList[index]
     print('the closest positioned player is positioned at ' + str(closest[0]) + ' and ' + str(closest[1]))
     return closest
-# print(is_free(board, 500, 100))
-# place_piece(board, 500, 100, "spelare1")
-# place_piece(board, 500, 100, "spelare2")
-# place_piece(board, 1, 100, "spelare2")
-# place_piece(board, 500, 200, "spelare2")
-# print(is_free(board, 500, 100))
-# get_piece(board, 500, 100)
-# get_piece(board, 666,666)
-# remove_piece(board, 500, 100)
-# remove_piece(board, 1, 1)
-# print(is_free(board, 500, 100))
-# move_piece(board,  500, 200, 500, 100)
-# get_piece(board, 500, 100)
-# count(board, "column", 500, "spelare2")
-# count(board, "row", 100, "spelare2")
-# nearest_piece(board, 500, 105)
