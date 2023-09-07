@@ -51,4 +51,3 @@ def split_rec(string):
   return first_part
 
 print(split_rec("'lMiED)teD5E,_hLAe;Nm,0@Dli&Eg ,#4aI?rN@T§&e7#4E #<(S0A?<)NT8<0'"))
-
