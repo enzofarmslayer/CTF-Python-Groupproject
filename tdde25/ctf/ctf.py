@@ -51,9 +51,29 @@ for x in range(0, current_map.width):
         background.blit(images.grass,  (x*images.TILE_SIZE, y*images.TILE_SIZE))
 
 
-# <INSERT CREATE BOXES>
+#-- Create the boxes
+for x in range(0, current_map.width):
+    for y in range(0,  current_map.height):
+        # Get the type of boxes
+        box_type  = current_map.boxAt(x, y)
+        # If the box type is not 0 (aka grass tile), create a box
+        if(box_type != 0):
+            # Create a "Box" using the box_type, aswell as the x,y coordinates,
+            # and the pymunk space
+            box = gameobjects.get_box_with_type(x, y, box_type, space)
+            game_objects_list.append(box)
 
-# <INSERT CREATE TANKS>
+
+#-- Create the tanks
+# Loop over the starting poistion
+for i in range(0, len(current_map.start_positions)):
+    # Get the starting position of the tank "i"
+    pos = current_map.start_positions[i]
+    # Create the tank, images.tanks contains the image representing the tank
+    tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space)
+    # Add the tank to the list of tanks
+    tanks_list.append(tank)
+
 
 # <INSERT CREATE FLAG>
 
@@ -94,7 +114,10 @@ while running:
     screen.blit(background, (0, 0))
 
 
-    # <INSERT DISPLAY OBJECTS>
+    # Update the display of the game objects on the screen
+    for obj in game_objects_list:
+        obj.update_screen(screen)
+
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()
