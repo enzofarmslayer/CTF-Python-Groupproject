@@ -39,7 +39,17 @@ tanks_list = []
 # -- Resize the screen to the size of the current level
 screen = pygame.display.set_mode(current_map.rect().size)
 
-# <INSERT GENERATE BACKGROUND>
+#-- Generate the background
+background = pygame.Surface(screen.get_size())
+
+#   Copy the grass tile all over the level area
+for x in range(0, current_map.width):
+    for y in range(0,  current_map.height):
+        # The call to the function "blit" will copy the image
+        # contained in "images.grass" into the "background"
+        # image at the coordinates given as the second argument
+        background.blit(images.grass,  (x*images.TILE_SIZE, y*images.TILE_SIZE))
+
 
 # <INSERT CREATE BOXES>
 
@@ -58,7 +68,7 @@ while running:
     # -- Handle the events
     for event in pygame.event.get():
         # Check if we receive a QUIT event (for instance, if the user press the
-        # close button of the wiendow) or if the user press the escape key.
+        # close button of the window) or if the user press the escape key.
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             running = False
     # -- Update physics
@@ -80,7 +90,9 @@ while running:
 
     # -- Update Display
 
-    # <INSERT DISPLAY BACKGROUND>
+    # Display the background on the screen
+    screen.blit(background, (0, 0))
+
 
     # <INSERT DISPLAY OBJECTS>
 

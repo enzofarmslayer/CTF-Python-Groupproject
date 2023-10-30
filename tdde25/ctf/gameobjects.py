@@ -24,7 +24,7 @@ class GameObject:
 
     def update(self):
         """ Placeholder, supposed to be implemented in a subclass.
-            Should update the current state (after a tick) of the object."""
+            Should update the current state (after a  tick) of the object."""
         return
 
     def post_update(self):
