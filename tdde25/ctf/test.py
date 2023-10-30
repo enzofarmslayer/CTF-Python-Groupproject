@@ -17,3 +17,6 @@ class Tobias(Enzo):
 test = Tobias(1, 'sosh', 'enzo', 'tobias')
 test.updateNameName()
 print(test.sprite)
+print(
+    "enso lol"
+)
