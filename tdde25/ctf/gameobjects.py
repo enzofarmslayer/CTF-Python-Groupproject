@@ -12,7 +12,6 @@ def physics_to_display(x):
     """ This function is used to convert coordinates in the physic engine into the display coordinates """
     return x * images.TILE_SIZE
 
-
 class GameObject:
     """ Mostly handles visual aspects (pygame) of an object.
         Subclasses need to implement two functions:
@@ -48,7 +47,6 @@ class GameObject:
         offset = pymunk.Vec2d(*sprite.get_size()) / 2.
         p = p - offset
         screen.blit(sprite, p)  # Copy the sprite on the screen
-
 
 class GamePhysicsObject(GameObject):
     """ This class extends GameObject and it is used for objects which have a
