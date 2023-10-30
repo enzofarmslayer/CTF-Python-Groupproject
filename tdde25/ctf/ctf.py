@@ -118,6 +118,10 @@ while running:
     for obj in game_objects_list:
         obj.update_screen(screen)
 
+    # Update the display of the tanks on the screen
+    for tank in tanks_list:
+        tank.update_screen(screen)
+
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()
