@@ -77,6 +77,9 @@ for i in range(0, len(current_map.start_positions)):
 
 # <INSERT CREATE FLAG>
 
+flag = gameobjects.Flag(current_map.flag_position[0], current_map.flag_position[1])
+game_objects_list.append(flag)
+
 # ----- Main Loop -----#
 
 # -- Control whether the game run
@@ -84,13 +87,36 @@ running = True
 
 skip_update = 0
 
+action_map = {
+    K_UP: {
+        KEYDOWN: tanks_list[0].accelerate,
+        KEYUP: tanks_list[0].stop_moving
+    },
+    K_DOWN: {
+        KEYDOWN: tanks_list[0].decelerate,
+        KEYUP: tanks_list[0].stop_moving
+    },
+    K_LEFT: {
+        KEYDOWN: tanks_list[0].turn_left,
+        KEYUP: tanks_list[0].stop_turning
+    },
+    K_RIGHT: {
+        KEYDOWN: tanks_list[0].turn_right,
+        KEYUP: tanks_list[0].stop_turning
+    }
+}
+
 while running:
     # -- Handle the events
     for event in pygame.event.get():
         # Check if we receive a QUIT event (for instance, if the user press the
         # close button of the window) or if the user press the escape key.
+
+
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             running = False
+        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
+            action_map[event.key][event.type]()
     # -- Update physics
     if skip_update == 0:
         # Loop over all the game objects and update their speed in function of their
@@ -101,10 +127,23 @@ while running:
     else:
         skip_update -= 1
 
+    for obj in tanks_list:
+        obj.update()
+
     #   Check collisions and update the objects position
     space.step(1 / FRAMERATE)
 
+    #   Check if tank in in range to capture the flag
+    for tank in tanks_list:
+        tank.try_grab_flag(flag)
+
+    #   Checks if a tank has the flag if true change the position of the flag to that tank
+    for tank in tanks_list:
+        tank.post_update()
+
+
     #   Update object that depends on an other object position (for instance a flag)
+
     for obj in game_objects_list:
         obj.post_update()
 
@@ -121,7 +160,6 @@ while running:
     # Update the display of the tanks on the screen
     for tank in tanks_list:
         tank.update_screen(screen)
-
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()
