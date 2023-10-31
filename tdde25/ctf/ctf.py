@@ -80,6 +80,16 @@ for i in range(0, len(current_map.start_positions)):
 flag = gameobjects.Flag(current_map.flag_position[0], current_map.flag_position[1])
 game_objects_list.append(flag)
 
+# Add bases
+
+for i in range(0, len(current_map.start_positions)):
+    # Get the starting position of the tank "i"
+    pos = current_map.start_positions[i]
+    # Create the tank, images.tanks contains the image representing the tank
+    base = gameobjects.GameVisibleObject(pos[0], pos[1], images.bases)
+    # Add the tank to the list of tanks
+    game_objects_list.append(base)
+
 # ----- Main Loop -----#
 
 # -- Control whether the game run
