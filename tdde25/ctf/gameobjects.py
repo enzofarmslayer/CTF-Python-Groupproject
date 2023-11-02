@@ -289,3 +289,4 @@ class Flag(GameVisibleObject):
         super().__init__(x, y, images.flag)
 
 
+
