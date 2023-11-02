@@ -35,7 +35,7 @@ enzo = load_image('lukas.jpeg')
 
 bullet = load_image('bullet.png')
 bullet = pygame.transform.scale(bullet, (10, 10))
-enzo = pygame.transform.scale(enzo, (5, 5))
+enzo = pygame.transform.scale(enzo, (20, 20))
 bullet = pygame.transform.rotate(bullet, -90)
 
 # List of image of tanks of different colors

@@ -31,7 +31,7 @@ FRAMERATE = 50
 
 # -- Variables
 #   Define the current level
-current_map = maps.map0
+current_map = maps.map1
 #   List of all game objects
 game_objects_list = []
 tanks_list = []

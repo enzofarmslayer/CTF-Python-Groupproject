@@ -215,9 +215,27 @@ class Tank(GamePhysicsObject):
     
 class Bullet(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle bullet object. """
-
+    ACCELERATION = 1
+    acceleration = 1
+    max_speed = 1
     def __init__(self, tank:Tank, space):
-        super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.enzo, space, True)
+        self.angle = tank.body.angle
+        
+        super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.bullet, space, True)
+        # self.angle = tank.body.angle
+        # self.body.velocity = pymunk.Vec2d(10, 0).rotated(self.angle + math.radians(90))
+    def update(self):
+        self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
+
+    # def post_update(self):
+    #     # Creates a vector in the direction we want accelerate / decelerate
+    #     acceleration_vector = pymunk.Vec2d(8, 0).rotated(self.angle + math.radians(90))
+    #     # Applies the vector to our velocity
+    #     self.body.velocity += acceleration_vector
+
+    #     # Makes sure that we dont exceed our speed limit
+    #     velocity = clamp(self.max_speed, self.body.velocity.length)
+    #     self.body.velocity = pymunk.Vec2d(velocity, 0).rotated(self.body.velocity.angle)
 
 class Box(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle box objects. """
