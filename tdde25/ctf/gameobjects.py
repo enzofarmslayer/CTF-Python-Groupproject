@@ -5,7 +5,6 @@ import pygame
 import pymunk
 import images
 
-
 DEBUG = False  # Change this to set it in debug mode
 
 
@@ -125,9 +124,9 @@ class Tank(GamePhysicsObject):
 
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
-    ACCELERATION = 0.8
-    NORMAL_MAX_SPEED = 4.0
-    FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 1
+    ACCELERATION = 0.4
+    NORMAL_MAX_SPEED = 1.5
+    FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 0.5
 
     def __init__(self, x, y, orientation, sprite, space):
         super().__init__(x, y, orientation, sprite, space, True)
@@ -210,14 +209,16 @@ class Tank(GamePhysicsObject):
         return self.flag is not None and (self.start_position - self.body.position).length < 0.2
 
     def shoot(self, space):
-        """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
-        return Bullet(self, space)
+
+        return Bullet(self, space, 1)
     
 class Bullet(GamePhysicsObject):
-    """ This class extends the GamePhysicsObject to handle bullet object. """
+    """ This class extends the GamePhysicsObject to handle bullets """
 
-    def __init__(self, tank:Tank, space):
+    def __init__(self, tank:Tank, space, speed):
         super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.enzo, space, True)
+        self.speed = speed
+
 
 class Box(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle box objects. """
@@ -240,7 +241,7 @@ def get_box_with_type(x, y, type, space):
         return Box(x, y, images.rockbox, False, space, False)
     if type == 2:  # Creates a movable destructable woodbox
         return Box(x, y, images.woodbox, True, space, True)
-    if type == 3:  # Creates a , (self.width,movable non-destructable metalbox
+    if type == 3:  # Creates a movable non-destructable metalbox
         return Box(x, y, images.metalbox, True, space, False)
 
 
