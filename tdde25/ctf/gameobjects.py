@@ -211,8 +211,13 @@ class Tank(GamePhysicsObject):
 
     def shoot(self, space):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
-        return
+        return Bullet(self, space)
+    
+class Bullet(GamePhysicsObject):
+    """ This class extends the GamePhysicsObject to handle bullet object. """
 
+    def __init__(self, tank:Tank, space):
+        super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.enzo, space, True)
 
 class Box(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle box objects. """
