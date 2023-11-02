@@ -35,3 +35,8 @@ fi
 source ctf-env/bin/activate
 
 # Make sure the required libraries are installed
+
+pip install pymunk==6.5.1
+pip install pygame==2.5.0
+pip install pycodestyle
+

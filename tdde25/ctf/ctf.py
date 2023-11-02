@@ -83,11 +83,11 @@ game_objects_list.append(flag)
 # Add bases
 
 for i in range(0, len(current_map.start_positions)):
-    # Get the starting position of the tank "i"
+    # Get the starting position of the base "i"
     pos = current_map.start_positions[i]
-    # Create the tank, images.tanks contains the image representing the tank
-    base = gameobjects.GameVisibleObject(pos[0], pos[1], images.flag)
-    # Add the tank to the list of tanks
+    # Create the base, images.bases contains the image representing the base
+    base = gameobjects.GameVisibleObject(pos[0], pos[1], images.bases[i])
+    # Add the base to the list of bases
     game_objects_list.append(base)
 
 # ----- Main Loop -----#
@@ -146,6 +146,8 @@ while running:
     #   Check if tank in in range to capture the flag
     for tank in tanks_list:
         tank.try_grab_flag(flag)
+        if tank.has_won():
+            running = False
 
     #   Checks if a tank has the flag if true change the position of the flag to that tank
     for tank in tanks_list:
@@ -176,3 +178,18 @@ while running:
 
     #   Control the game framerate
     clock.tick(FRAMERATE)
+
+    edges = [
+        pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
+        pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
+        pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
+        pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+    ]
+    space.add(*edges)
+
+# borders = []
+# borders.append ()
+# borders.append ()
+# borders.append ()
+# borders.append ()
+# space.add.borders
