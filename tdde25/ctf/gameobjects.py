@@ -103,7 +103,7 @@ class GamePhysicsObject(GameObject):
     def screen_orientation(self):
         """ Angles are reversed from the engine to the display. """
         return -math.degrees(self.body.angle)
-
+ 
     def update_screen(self, screen):
         super().update_screen(screen)
         # debug draw
