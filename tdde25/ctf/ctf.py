@@ -35,6 +35,7 @@ current_map = maps.map1
 #   List of all game objects
 game_objects_list = []
 tanks_list = []
+ai_list = []
 
 # -- Resize the screen to the size of the current level
 screen = pygame.display.set_mode(current_map.rect().size)
@@ -182,13 +183,13 @@ while running:
     clock.tick(FRAMERATE)
 
     # Edges for game map
-    edges = [
-        pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
-        pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
-        pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
-        pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
-    ]
-    space.add(*edges)
+edges = [
+    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
+    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+]
+space.add(*edges)
 
 # borders = []
 # borders.append ()
