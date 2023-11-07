@@ -198,7 +198,18 @@ while running:
     #   Control the game framerate
     clock.tick(FRAMERATE)
 
+<<<<<<< HEAD
 
+=======
+    # Edges for game map
+edges = [
+    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
+    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+]
+space.add(*edges)
+>>>>>>> b4ff7aeee97909ee12aea6a41b7e9b73864c9a7e
 
 # borders = []
 # borders.append ()
