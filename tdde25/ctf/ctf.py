@@ -129,6 +129,8 @@ edges = [
 ]
 space.add(*edges)
 
+ai_list[1].find_shortest_path()
+
 while running:
     # -- Handle the events
     for event in pygame.event.get():
@@ -189,8 +191,8 @@ while running:
     for tank in tanks_list:
         tank.update_screen(screen)
 
-    for tank_ai in ai_list:
-        tank_ai.decide()
+    # for tank_ai in ai_list:
+    #     tank_ai.decide()
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()
@@ -198,18 +200,6 @@ while running:
     #   Control the game framerate
     clock.tick(FRAMERATE)
 
-<<<<<<< HEAD
-
-=======
-    # Edges for game map
-edges = [
-    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
-    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
-    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
-    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
-]
-space.add(*edges)
->>>>>>> b4ff7aeee97909ee12aea6a41b7e9b73864c9a7e
 
 # borders = []
 # borders.append ()
