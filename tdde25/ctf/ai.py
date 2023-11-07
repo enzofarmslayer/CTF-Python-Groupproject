@@ -1,12 +1,15 @@
 """ This file contains function and classes for the Artificial Intelligence used in the game.
 """
-
+import maps
 import math
+import random
 from collections import defaultdict, deque
 
 import pymunk
 from pymunk import Vec2d
 import gameobjects
+
+current_map = maps.map0
 
 # NOTE: use only 'map0' during development!
 
@@ -54,6 +57,19 @@ class Ai:
     def decide(self):
         """ Main decision function that gets called on every tick of the game.
         """
+        # randomint = random.randint(1, 9)
+        # if randomint > 7:
+        #     self.tank.accelerate()
+        # elif randomint < 3:
+        #     self.tank.decelerate()
+        #     self.tank.turn_left()
+        # elif randomint == 3 or randomint == 4:
+        #     self.tank.turn_right()
+        #     self.tank.stop_moving
+        # else:
+        #     self.tank.accelerate()
+        #     self.tank.stop_turning()
+        print(self.currentmap.boxes)
         pass  # To be implemented
 
     def maybe_shoot(self):
@@ -110,10 +126,19 @@ class Ai:
             A bordering square is only considered accessible if it is grass
             or a wooden box.
         """
-        neighbors = []  # Find the coordinates of the tiles' four neighbors
+        x_coords = coord_vec[0]
+        y_coords = coord_vec[1]
+
+        neighbors = [(x_coords + 1, y_coords),(x_coords + -1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
         return filter(self.filter_tile_neighbors, neighbors)
 
     def filter_tile_neighbors(self, coord):
         """ Used to filter the tile to check if it is a neighbor of the tank.
         """
-        return True
+        x_coords = coord_vec[0]
+        y_coords = coord_vec[1]
+        
+        if x_coords < current_map.width or x_coords > 0 or y_coords < current_map.height or y_coords > 0:
+            if self.currentmap.boxes[y_coords][x_coords] == 0:
+                return True
+

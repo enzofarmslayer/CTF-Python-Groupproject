@@ -1,22 +1,25 @@
 class Enzo:
     def __init__(self, sprite):
         self.sprite = sprite
-        self.sprite = "sosh"
+        self.sprite = "Sosh är en stor fet idiot"
     def updateName(self):
         self.sprite += 'cum'
     def updateNameName(self):
         self.updateName()
         self.updateName()
+class Sosh(Enzo):
+    def __init__(self, sprite):
+        super().__init__(sprite)
 
-class Tobias(Enzo):
-    def __init__(self, x, y, v, sprite):
-        self.sprite = sprite
+tobias = Sosh('enzo')
+print(tobias.sprite)
 
-        self.sprite += 'cumerow'
+action_map = {
+    test: {
+        sosh: 'hej',
+        enzo: 'hej'
+    }
+}
 
-test = Tobias(1, 'sosh', 'enzo', 'tobias')
-test.updateNameName()
-print(test.sprite)
-print(
-    "enso lol"
-)
+
+        

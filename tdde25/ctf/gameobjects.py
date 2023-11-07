@@ -126,7 +126,7 @@ class Tank(GamePhysicsObject):
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
     ACCELERATION = 0.8
-    NORMAL_MAX_SPEED = 4.0
+    NORMAL_MAX_SPEED = 2.0
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 1
 
     def __init__(self, x, y, orientation, sprite, space):
