@@ -116,6 +116,16 @@ action_map = {
     }
 }
 
+
+    # Edges for game map
+edges = [
+    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
+    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+]
+space.add(*edges)
+
 while running:
     # -- Handle the events
     for event in pygame.event.get():
@@ -181,14 +191,6 @@ while running:
     #   Control the game framerate
     clock.tick(FRAMERATE)
 
-    # Edges for game map
-    edges = [
-        pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
-        pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
-        pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
-        pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
-    ]
-    space.add(*edges)
 
 # borders = []
 # borders.append ()
