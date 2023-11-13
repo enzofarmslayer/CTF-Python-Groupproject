@@ -129,14 +129,68 @@ edges = [
 ]
 space.add(*edges)
 
-ai_list[1].find_shortest_path()
+for edge in edges:
+    edge.collision_type = 4
+
+# Collistions
+def collision_bullet_tank(arb, space, data):
+
+    bullet = arb.shapes[0].parent
+    tank = arb.shapes[1].parent
+    
+    if bullet.shooter == tank: 
+        return False
+    
+    if bullet in game_objects_list:
+        game_objects_list.remove(bullet)
+        space.remove(arb.shapes[0], arb.shapes[0].body)
+    if tank in tanks_list:
+        # tanks_list.remove(tank)
+        # space.remove(arb.shapes[1], arb.shapes[1].body)
+        # tanks_list.append(tank)
+        # space.add(arb.shapes[1], arb.shapes[1].body)
+        tank.respawn(flag)
+    
+    return False
+
+def collision_bullet_box(arb, space, data):
+
+    bullet = arb.shapes[0].parent
+    box = arb.shapes[1].parent
+
+    if box in game_objects_list and box.destructable:
+        game_objects_list.remove(box)
+        space.remove(arb.shapes[1], arb.shapes[1].body)
+    if bullet in game_objects_list:
+        game_objects_list.remove(bullet)
+        space.remove(arb.shapes[0], arb.shapes[0].body)
+
+    return False
+
+def collision_bullet_border(arb, space, data):
+    bullet = arb.shapes[0].parent
+
+    if bullet in game_objects_list:
+        game_objects_list.remove(bullet)
+        space.remove(arb.shapes[0], arb.shapes[0].body)
+
+    return False
+
+
+handler = space.add_collision_handler(1, 2)
+handler.pre_solve = collision_bullet_tank
+handler = space.add_collision_handler(1, 3)
+handler.pre_solve = collision_bullet_box
+handler = space.add_collision_handler(1, 4)
+handler.pre_solve = collision_bullet_border
+
+#ai_list[1].find_shortest_path()
 
 while running:
     # -- Handle the events
     for event in pygame.event.get():
         # Check if we receive a QUIT event (for instance, if the user press the
         # close button of the window) or if the user press the escape key.
-
 
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             running = False
@@ -159,6 +213,7 @@ while running:
         obj.update()
 
     #   Check collisions and update the objects position
+
     space.step(1 / FRAMERATE)
 
     #   Check if tank in in range to capture the flag
@@ -173,7 +228,6 @@ while running:
 
 
     #   Update object that depends on an other object position (for instance a flag)
-
     for obj in game_objects_list:
         obj.post_update()
 
@@ -199,7 +253,6 @@ while running:
 
     #   Control the game framerate
     clock.tick(FRAMERATE)
-
 
 # borders = []
 # borders.append ()
