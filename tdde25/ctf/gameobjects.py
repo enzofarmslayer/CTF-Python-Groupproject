@@ -230,8 +230,8 @@ class Bullet(GamePhysicsObject):
     acceleration = 1
     max_speed = 1
     def __init__(self, tank:Tank, space):
+        super().__init__(tank.body.position[0], tank.body.position[1], math.degrees(tank.body.angle), images.tanks[0], space, True)
         self.angle = tank.body.angle 
-        super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.bullet, space, True)
         self.shooter = tank
         self.shape.collision_type = 1 #
         #self.shape = pymunk.Poly()
@@ -241,8 +241,8 @@ class Bullet(GamePhysicsObject):
         # self.angle = tank.body.angle
         # self.body.velocity = pymunk.Vec2d(10, 0).rotated(self.angle + math.radians(90))
     def update(self):
+        #self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
         self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
-
 
     # def post_update(self):
     #     # Creates a vector in the direction we want accelerate / decelerate
