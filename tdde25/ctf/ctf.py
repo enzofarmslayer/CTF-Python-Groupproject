@@ -184,8 +184,6 @@ handler.pre_solve = collision_bullet_box
 handler = space.add_collision_handler(1, 4)
 handler.pre_solve = collision_bullet_border
 
-#ai_list[1].find_shortest_path()
-
 while running:
     # -- Handle the events
     for event in pygame.event.get():
@@ -245,8 +243,9 @@ while running:
     for tank in tanks_list:
         tank.update_screen(screen)
 
-    # for tank_ai in ai_list:
-    #     tank_ai.decide()
+    # Updating ai
+    for tank_ai in ai_list:
+        tank_ai.decide()
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()
