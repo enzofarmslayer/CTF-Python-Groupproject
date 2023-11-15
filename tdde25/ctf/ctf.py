@@ -31,10 +31,11 @@ FRAMERATE = 50
 
 # -- Variables
 #   Define the current level
-current_map = maps.map1
+current_map = maps.map0
 #   List of all game objects
 game_objects_list = []
 tanks_list = []
+ai_list = []
 
 # -- Resize the screen to the size of the current level
 screen = pygame.display.set_mode(current_map.rect().size)
@@ -71,6 +72,10 @@ for i in range(0, len(current_map.start_positions)):
     pos = current_map.start_positions[i]
     # Create the tank, images.tanks contains the image representing the tank
     tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space)
+    # Create the ai and add it to the ai list
+    if i > 0:
+        ai_tank = ai.Ai(tank, game_objects_list, tanks_list, space, current_map)
+        ai_list.append(ai_tank)
     # Add the tank to the list of tanks
     tanks_list.append(tank)
 
@@ -115,6 +120,16 @@ action_map = {
         KEYUP: tanks_list[0].stop_turning
     }
 }
+    # Edges for game map
+edges = [
+    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
+    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
+    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+]
+space.add(*edges)
+
+ai_list[1].find_shortest_path()
 
 
     # Edges for game map
@@ -145,6 +160,7 @@ while running:
         # acceleration.
         for obj in game_objects_list:
             obj.update()
+
         skip_update = 2
     else:
         skip_update -= 1
@@ -184,6 +200,9 @@ while running:
     # Update the display of the tanks on the screen
     for tank in tanks_list:
         tank.update_screen(screen)
+
+    # for tank_ai in ai_list:
+    #     tank_ai.decide()
 
     #   Redisplay the entire screen (see double buffer technique)
     pygame.display.flip()

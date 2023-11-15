@@ -1,15 +1,22 @@
 class Enzo:
     def __init__(self, sprite):
-        self.sprite = sprite + 'cum'
+        self.sprite = sprite
+        self.sprite = "sosh"
+    def updateName(self):
+        self.sprite += 'cum'
     def updateNameName(self):
         self.updateName()
         self.updateName()
 
-class Sosh(Enzo):
-    karl = 'rickard'
-    def __init__(self, sprite, tobias):
-        self.tobias = tobias + self.karl
-        super().__init__(sprite)
+class Tobias(Enzo):
+    def __init__(self, x, y, v, sprite):
+        self.sprite = sprite
 
-enzo = Sosh('penis', 'görren')
-print(enzo.sprite, enzo.tobias)
+        self.sprite += 'cumerow'
+
+test = Tobias(1, 'sosh', 'enzo', 'tobias')
+test.updateNameName()
+print(test.sprite)
+print(
+    "enso lol"
+)

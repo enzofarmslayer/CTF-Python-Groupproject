@@ -1,12 +1,15 @@
 """ This file contains function and classes for the Artificial Intelligence used in the game.
 """
-
+import maps
 import math
+import random
 from collections import defaultdict, deque
 
 import pymunk
 from pymunk import Vec2d
 import gameobjects
+
+current_map = maps.map0
 
 # NOTE: use only 'map0' during development!
 
@@ -54,6 +57,19 @@ class Ai:
     def decide(self):
         """ Main decision function that gets called on every tick of the game.
         """
+        # randomint = random.randint(1, 9)
+        # if randomint > 7:
+        #     self.tank.accelerate()
+        # elif randomint < 3:
+        #     self.tank.decelerate()
+        #     self.tank.turn_left()
+        # elif randomint == 3 or randomint == 4:
+        #     self.tank.turn_right()
+        #     self.tank.stop_moving
+        # else:
+        #     self.tank.accelerate()
+        #     self.tank.stop_turning()
+        print(self.currentmap.boxes)
         pass  # To be implemented
 
     def maybe_shoot(self):
@@ -73,8 +89,49 @@ class Ai:
         """ A simple Breadth First Search using integer coordinates as our nodes.
             Edges are calculated as we go, using an external function.
         """
-        # To be implemented
+        queue = deque()
+        visited = deque()
+        paths = defaultdict()
+
+        # insert our source node into the queue
+        queue.appendleft(self.grid_pos)
+        visited.appendleft(self.grid_pos)
+        # while queue is not empty:
+        while len(queue) >= 1:
+            tile_neighbors = self.get_tile_neighbors(queue[0])
+            if queue[0] == self.get_target_tile() or queue[0] == (4, 4):
+                break
+            for i in tile_neighbors:
+                if i not in visited:
+                    queue.append(i)
+                    visited.append(i)
+                    paths[i] = queue[0]
+            queue.popleft()
+
         shortest_path = []
+        default = self.get_target_tile()
+        shortest_path.append(default)
+        while True:
+            add = paths[default]
+            shortest_path.append(add)
+            default = add
+            if add == self.grid_pos:
+                break
+            
+        print(shortest_path)
+
+
+
+        #     remove the first node from the queue
+        #     if node is our target:
+        #         save the path to this node as our shortest_path
+        #         stop looping
+        #     for every neighbor to the node:
+        #         if the neighbor has not already been visited:
+        #             add it to the queue
+        #             add it to our set of visited nodes
+        #             save the path to this node
+
         return deque(shortest_path)
 
     def get_target_tile(self):
@@ -110,10 +167,23 @@ class Ai:
             A bordering square is only considered accessible if it is grass
             or a wooden box.
         """
-        neighbors = []  # Find the coordinates of the tiles' four neighbors
-        return filter(self.filter_tile_neighbors, neighbors)
+        x_coords = coord_vec[0]
+        y_coords = coord_vec[1]
+
+        neighbors = [(x_coords + 1, y_coords),(x_coords + -1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
+
+        result = filter(self.filter_tile_neighbors, neighbors)  # This is your filter object
+        result_list = list(result)  # Convert filter object to a list
+
+        return result_list
 
     def filter_tile_neighbors(self, coord):
         """ Used to filter the tile to check if it is a neighbor of the tank.
         """
-        return True
+        x_coords = coord[0]
+        y_coords = coord[1]
+        if x_coords < current_map.width and x_coords >= 0 and y_coords < current_map.height and y_coords >= 0:
+            if self.currentmap.boxes[y_coords][x_coords] == 0:
+                return True
+        
+

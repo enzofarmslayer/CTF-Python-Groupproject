@@ -2,6 +2,7 @@ import images
 import pygame
 
 
+
 class Map:
     """ An instance of Map is a blueprint for how the game map will look. """
 
