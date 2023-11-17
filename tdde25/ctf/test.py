@@ -1,25 +1,14 @@
-class Enzo:
-    def __init__(self, sprite):
-        self.sprite = sprite
-        self.sprite = "Sosh är en stor fet idiot"
-    def updateName(self):
-        self.sprite += 'cum'
-    def updateNameName(self):
-        self.updateName()
-        self.updateName()
-class Sosh(Enzo):
-    def __init__(self, sprite):
-        super().__init__(sprite)
+def decide(self):
+        """ Main decision function that gets called on every tick of the game.
+        """
+        next(self.move_cycle_gen())
 
-tobias = Sosh('enzo')
-print(tobias.sprite)
+def move_cycle_gen(self):
+        """ A generator that iteratively goes through all the required steps
+            to move to our goal.
+        """
+        print('before first yield')
+        yield
+        print('after first yield')
 
-action_map = {
-    test: {
-        sosh: 'hej',
-        enzo: 'hej'
-    }
-}
-
-
-        
+while True
