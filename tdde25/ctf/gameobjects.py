@@ -141,6 +141,8 @@ class Tank(GamePhysicsObject):
         self.max_speed = Tank.NORMAL_MAX_SPEED     # Impose a maximum speed to the tank
         self.start_position = pymunk.Vec2d(x, y)        # Define the start position, which is also the position where the tank has to return with the flag
         self.start_orientation = self.body.angle
+        self.tick = 0
+        self.can_shoot = False
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -185,6 +187,14 @@ class Tank(GamePhysicsObject):
         self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
 
     def post_update(self):
+       
+        if self.can_shoot == False:
+            self.tick += 1
+        if self.tick > 50:
+            self.can_shoot = True
+            self.tick = 0
+            print(self.can_shoot)
+            
         # If the tank carries the flag, then update the positon of the flag
         if (self.flag is not None):
             self.flag.x = self.body.position[0]
@@ -244,7 +254,7 @@ class Bullet(GamePhysicsObject):
         #self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
         self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
 
-    # def post_update(self):
+    #def post_update(self):
     #     # Creates a vector in the direction we want accelerate / decelerate
     #     acceleration_vector = pymunk.Vec2d(8, 0).rotated(self.angle + math.radians(90))
     #     # Applies the vector to our velocity

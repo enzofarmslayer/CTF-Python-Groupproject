@@ -109,7 +109,7 @@ action_map = {
     },
     K_DOWN: {
         KEYDOWN: tanks_list[0].decelerate,
-        KEYUP: tanks_list[0].stop_moving
+         KEYUP: tanks_list[0].stop_moving
     },
     K_LEFT: {
         KEYDOWN: tanks_list[0].turn_left,
@@ -224,13 +224,15 @@ while running:
             running = False
         elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
             action_map[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_SPACE:
+        elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
+            tank.can_shoot = False
             game_objects_list.append(tanks_list[0].shoot(space))
 
         elif event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
             action_map2[event.key][event.type]()
         elif event.type == KEYDOWN and event.key == K_o:
             game_objects_list.append(tanks_list[1].shoot(space))
+            
 
 
     # -- Update physics
