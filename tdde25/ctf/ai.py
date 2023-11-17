@@ -204,4 +204,3 @@ class Ai:
     def accelerate(self):
         self.tank.accelerate()
         return
-

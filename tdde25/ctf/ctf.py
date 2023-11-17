@@ -120,6 +120,26 @@ action_map = {
         KEYUP: tanks_list[0].stop_turning
     }
 }
+
+action_map2 = {
+    K_keyW: {
+        KEYDOWN: tanks_list[1].accelerate,
+        KEYUP: tanks_list[1].stop_moving
+    },
+    K_keyS: {
+        KEYDOWN: tanks_list[1].decelerate,
+        KEYUP: tanks_list[1].stop_moving
+    },
+    K_keyA: {
+        KEYDOWN: tanks_list[1].turn_left,
+        KEYUP: tanks_list[1].stop_turning
+    },
+    K_keyD: {
+        KEYDOWN: tanks_list[1].turn_right,
+        KEYUP: tanks_list[1].stop_turning
+    }
+}
+
     # Edges for game map
 edges = [
     pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
@@ -206,6 +226,13 @@ while running:
             action_map[event.key][event.type]()
         elif event.type == KEYDOWN and event.key == K_SPACE:
             game_objects_list.append(tanks_list[0].shoot(space))
+
+        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
+            action_map2[event.key][event.type]()
+        elif event.stype == KEYDOWN and event.key == K_SPACE:
+            game_objects_list.append(tanks_list[0].shoot(space))
+
+
     # -- Update physics
     if skip_update == 0:
         # Loop over all the game objects and update their speed in function of their
