@@ -49,6 +49,7 @@ class Ai:
         self.path = deque()
         self.move_cycle = self.move_cycle_gen()
         self.update_grid_pos()
+        self.next_coord = None
 
     def update_grid_pos(self):
         """ This should only be called in the beginning, or at the end of a move_cycle. """
@@ -57,20 +58,7 @@ class Ai:
     def decide(self):
         """ Main decision function that gets called on every tick of the game.
         """
-        # randomint = random.randint(1, 9)
-        # if randomint > 7:
-        #     self.tank.accelerate()
-        # elif randomint < 3:
-        #     self.tank.decelerate()
-        #     self.tank.turn_left()
-        # elif randomint == 3 or randomint == 4:
-        #     self.tank.turn_right()
-        #     self.tank.stop_moving
-        # else:
-        #     self.tank.accelerate()
-        #     self.tank.stop_turning()
-        print(self.currentmap.boxes)
-        pass  # To be implemented
+        next(self.move_cycle)
 
     def maybe_shoot(self):
         """ Makes a raycast query in front of the tank. If another tank
@@ -82,8 +70,20 @@ class Ai:
         """ A generator that iteratively goes through all the required steps
             to move to our goal.
         """
+
         while True:
+            shortest_path = self.find_shortest_path()
+            if not shortest_path:
+                yield
+                continue
+            self.next_coord = self.path.popleft()
             yield
+            self.turn()
+            while not self.correct_angle():
+                yield
+            self.accelerate()
+            yield
+
 
     def find_shortest_path(self):
         """ A simple Breadth First Search using integer coordinates as our nodes.
@@ -117,21 +117,10 @@ class Ai:
             default = add
             if add == self.grid_pos:
                 break
-            
-        print(shortest_path)
-
-
-
-        #     remove the first node from the queue
-        #     if node is our target:
-        #         save the path to this node as our shortest_path
-        #         stop looping
-        #     for every neighbor to the node:
-        #         if the neighbor has not already been visited:
-        #             add it to the queue
-        #             add it to our set of visited nodes
-        #             save the path to this node
-
+        shortest_path.pop()
+        shortest_path.reverse()
+        
+        self.path = deque(shortest_path)
         return deque(shortest_path)
 
     def get_target_tile(self):
@@ -185,5 +174,34 @@ class Ai:
         if x_coords < current_map.width and x_coords >= 0 and y_coords < current_map.height and y_coords >= 0:
             if self.currentmap.boxes[y_coords][x_coords] == 0:
                 return True
+            
+    def turn(self):
+        desired_angle = angle_between_vectors(self.tank.body.position, self.next_coord)
+        angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
+
+        print(angle_diff)
+
+        if angle_diff < MIN_ANGLE_DIF and angle_diff > 0 or angle_diff > MIN_ANGLE_DIF and angle_diff < 0:
+            self.tank.stop_turning()
+            return True
+        else:
+            if angle_diff < 0:
+                self.tank.turn_right()
+            else:
+                self.tank.turn_left()
+        return False
+    
+    def correct_angle(self):
+        desired_angle = angle_between_vectors(self.tank.body.position, self.next_coord)
+        angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
+
+        if angle_diff < MIN_ANGLE_DIF and angle_diff > 0 or angle_diff > MIN_ANGLE_DIF and angle_diff < 0:
+            self.tank.stop_turning()
+            return True
+        else:
+            return False
         
+    def accelerate(self):
+        self.tank.accelerate()
+        return
 

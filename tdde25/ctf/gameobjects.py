@@ -134,10 +134,13 @@ class Tank(GamePhysicsObject):
         # Define variable used to apply motion to the tanks
         self.acceleration = 0  # 1 forward, 0 for stand still, -1 for backwards
         self.rotation = 0  # 1 clockwise, 0 for no rotation, -1 counter clockwise
-
+        self.shape.collision_type = 2 #
+        #self.shape = pymunk.Poly()
+        self.shape.parent = self
         self.flag = None                      # This variable is used to access the flag object, if the current tank is carrying the flag
         self.max_speed = Tank.NORMAL_MAX_SPEED     # Impose a maximum speed to the tank
         self.start_position = pymunk.Vec2d(x, y)        # Define the start position, which is also the position where the tank has to return with the flag
+        self.start_orientation = self.body.angle
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -213,19 +216,33 @@ class Tank(GamePhysicsObject):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
         return Bullet(self, space)
     
+    def respawn(self, flag):
+        if flag.is_on_tank:
+            self.flag = None
+            flag.is_on_tank = False
+        self.body.position = self.start_position
+        self.body.angle = self.start_orientation
+    
+    
 class Bullet(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle bullet object. """
     ACCELERATION = 1
     acceleration = 1
     max_speed = 1
     def __init__(self, tank:Tank, space):
-        self.angle = tank.body.angle
-        
+        self.angle = tank.body.angle 
         super().__init__(tank.body.position[0], tank.body.position[1], tank.body.angle, images.bullet, space, True)
+        self.shooter = tank
+        self.shape.collision_type = 1 #
+        #self.shape = pymunk.Poly()
+        #self.shape.parent = self
+
+
         # self.angle = tank.body.angle
         # self.body.velocity = pymunk.Vec2d(10, 0).rotated(self.angle + math.radians(90))
     def update(self):
         self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
+
 
     # def post_update(self):
     #     # Creates a vector in the direction we want accelerate / decelerate
@@ -244,6 +261,7 @@ class Box(GamePhysicsObject):
         """ It takes as arguments the coordinate of the starting position of the box (x,y) and the box model (boxmodel). """
         super().__init__(x, y, 0, sprite, space, movable)
         self.destructable = destructable
+        self.shape.collision_type = 3 # Collision type
 
 
 def get_box_with_type(x, y, type, space):
@@ -279,6 +297,7 @@ class GameVisibleObject(GameObject):
     def screen_orientation(self):
         """ Overwrite from GameObject """
         return self.orientation
+    
 
 
 class Flag(GameVisibleObject):

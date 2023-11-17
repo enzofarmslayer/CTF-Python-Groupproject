@@ -1,22 +1,14 @@
-class Enzo:
-    def __init__(self, sprite):
-        self.sprite = sprite
-        self.sprite = "sosh"
-    def updateName(self):
-        self.sprite += 'cum'
-    def updateNameName(self):
-        self.updateName()
-        self.updateName()
+def decide(self):
+        """ Main decision function that gets called on every tick of the game.
+        """
+        next(self.move_cycle_gen())
 
-class Tobias(Enzo):
-    def __init__(self, x, y, v, sprite):
-        self.sprite = sprite
+def move_cycle_gen(self):
+        """ A generator that iteratively goes through all the required steps
+            to move to our goal.
+        """
+        print('before first yield')
+        yield
+        print('after first yield')
 
-        self.sprite += 'cumerow'
-
-test = Tobias(1, 'sosh', 'enzo', 'tobias')
-test.updateNameName()
-print(test.sprite)
-print(
-    "enso lol"
-)
+while True
