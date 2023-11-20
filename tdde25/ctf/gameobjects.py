@@ -190,10 +190,9 @@ class Tank(GamePhysicsObject):
        
         if self.can_shoot == False:
             self.tick += 1
-        if self.tick > 50:
+        if self.tick > 30:
             self.can_shoot = True
             self.tick = 0
-            print(self.can_shoot)
             
         # If the tank carries the flag, then update the positon of the flag
         if (self.flag is not None):

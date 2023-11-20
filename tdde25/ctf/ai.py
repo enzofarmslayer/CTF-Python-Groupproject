@@ -90,21 +90,21 @@ class Ai:
             Edges are calculated as we go, using an external function.
         """
         queue = deque()
-        visited = deque()
+        visited = set()
         paths = defaultdict()
 
         # insert our source node into the queue
         queue.appendleft(self.grid_pos)
-        visited.appendleft(self.grid_pos)
+        visited.add(self.grid_pos)
         # while queue is not empty:
         while len(queue) >= 1:
             tile_neighbors = self.get_tile_neighbors(queue[0])
-            if queue[0] == self.get_target_tile() or queue[0] == (4, 4):
+            if queue[0] == self.get_target_tile():
                 break
             for i in tile_neighbors:
                 if i not in visited:
                     queue.append(i)
-                    visited.append(i)
+                    visited.add(i)
                     paths[i] = queue[0]
             queue.popleft()
 
@@ -119,6 +119,8 @@ class Ai:
                 break
         shortest_path.pop()
         shortest_path.reverse()
+
+        print(shortest_path)
         
         self.path = deque(shortest_path)
         return deque(shortest_path)
