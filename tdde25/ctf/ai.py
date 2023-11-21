@@ -76,14 +76,15 @@ class Ai:
             if not shortest_path:
                 yield
                 continue
-            self.next_coord = self.path.popleft()
+            next_coord = shortest_path.popleft()
             yield
-            self.turn()
-            while not self.correct_angle():
+            self.turn(next_coord)
+            while not self.correct_angle(next_coord):
                 yield
             self.accelerate()
-            yield
-
+            while not self.correct_pos(next_coord):
+                yield
+ 
 
     def find_shortest_path(self):
         """ A simple Breadth First Search using integer coordinates as our nodes.
@@ -120,10 +121,11 @@ class Ai:
         shortest_path.pop()
         shortest_path.reverse()
 
-        print(shortest_path)
-        
-        self.path = deque(shortest_path)
-        return deque(shortest_path)
+        #print(shortest_path)
+        new_shortest_path = [tuple(value + 0.5 for value in tup) for tup in shortest_path]
+        #print(new_shortest_path)
+        self.path = deque(new_shortest_path)
+        return deque(new_shortest_path)
 
     def get_target_tile(self):
         """ Returns position of the flag if we don't have it. If we do have the flag,
@@ -177,14 +179,12 @@ class Ai:
             if self.currentmap.boxes[y_coords][x_coords] == 0:
                 return True
             
-    def turn(self):
-        desired_angle = angle_between_vectors(self.tank.body.position, self.next_coord)
+    def turn(self, next_coord):
+        desired_angle = angle_between_vectors(self.tank.body.position, next_coord)
         angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
-
         print(angle_diff)
 
-        if angle_diff < MIN_ANGLE_DIF and angle_diff > 0 or angle_diff > MIN_ANGLE_DIF and angle_diff < 0:
-            self.tank.stop_turning()
+        if angle_diff < MIN_ANGLE_DIF and angle_diff >= 0 or angle_diff > MIN_ANGLE_DIF and angle_diff <= 0:
             return True
         else:
             if angle_diff < 0:
@@ -193,14 +193,33 @@ class Ai:
                 self.tank.turn_left()
         return False
     
-    def correct_angle(self):
-        desired_angle = angle_between_vectors(self.tank.body.position, self.next_coord)
-        angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
-
-        if angle_diff < MIN_ANGLE_DIF and angle_diff > 0 or angle_diff > MIN_ANGLE_DIF and angle_diff < 0:
-            self.tank.stop_turning()
+    def correct_pos(self, next_coord):
+        desired_pos = next_coord
+        current_pos = self.tank.body.position
+        threshold = 0.2
+        
+        if (desired_pos - current_pos).length <= threshold:
+            self.update_grid_pos()
+            self.tank.stop_moving()
             return True
         else:
+            return False
+        
+    def correct_angle(self, next_coord):
+        desired_angle = angle_between_vectors(self.tank.body.position, next_coord)
+        angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
+
+        if angle_diff < MIN_ANGLE_DIF and angle_diff >= 0 or angle_diff > MIN_ANGLE_DIF and angle_diff <= 0:
+            self.tank.stop_turning()
+            print('ga')
+            return True
+        elif -angle_diff < MIN_ANGLE_DIF and -angle_diff >= 0 or -angle_diff > MIN_ANGLE_DIF and -angle_diff <= 0:
+            self.tank.stop_turning()
+            print('sdf')
+            return True
+        else:
+            print('angle diff: ', angle_diff)
+            print('MIN_ANGLE DIF', MIN_ANGLE_DIF)
             return False
         
     def accelerate(self):
