@@ -143,6 +143,8 @@ class Tank(GamePhysicsObject):
         self.start_orientation = self.body.angle
         self.tick = 0
         self.can_shoot = False
+        self.recoil = 0
+        self.recoil_change = 0
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -169,6 +171,17 @@ class Tank(GamePhysicsObject):
         """ Call this function to make the tank stop turning. """
         self.rotation = 0
         self.body.angular_velocity = 0
+    
+    def change_recoil(self):
+        if self.recoil == 1:
+            self.acceleration = -0.8
+            self.recoil_change = self.recoil_change - 1
+            if self.recoil_change < 0:
+                self.recoil = -1
+        elif self.recoil == -1:
+            self.accelerate()
+            self.recoil = 0
+
 
     def update(self):
         """ A function to update the objects coordinates. Gets called at every tick of the game. """
@@ -223,6 +236,8 @@ class Tank(GamePhysicsObject):
 
     def shoot(self, space):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
+        self.recoil = 1
+        self.recoil_change = 3
         return Bullet(self, space)
     
     def respawn(self, flag):

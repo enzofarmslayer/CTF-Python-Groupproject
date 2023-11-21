@@ -263,6 +263,9 @@ while running:
     for tank in tanks_list:
         tank.post_update()
 
+    # checks if a tank has shoot a bullet and therefore is supposed to have recoil
+    for tank in tanks_list:
+        tank.change_recoil()
 
     #   Update object that depends on an other object position (for instance a flag)
     for obj in game_objects_list:
