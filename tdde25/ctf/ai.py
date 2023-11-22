@@ -13,7 +13,7 @@ current_map = maps.map0
 
 # NOTE: use only 'map0' during development!
 
-MIN_ANGLE_DIF = math.radians(3)   # 3 degrees, a bit more than we can turn each tick
+MIN_ANGLE_DIF = math.radians(8)   # 3 degrees, a bit more than we can turn each tick
 
 
 def angle_between_vectors(vec1, vec2):
@@ -26,6 +26,21 @@ def angle_between_vectors(vec1, vec2):
 
 
 def periodic_difference_of_angles(angle1, angle2):
+    """ Compute the difference between two angles.
+    """
+    angle1 = ((angle1 + math.pi) % (2*math.pi)) - math.pi
+    angle2 = ((angle2 + math.pi) % (2*math.pi)) - math.pi
+
+    diff = angle2 - angle1
+
+    if diff > math.pi:
+        diff -= 2 * math.pi
+    elif diff < -math.pi:
+        diff += 2 * math.pi
+
+    return diff 
+
+def periodic_difference_of_angles1(angle1, angle2):
     """ Compute the difference between two angles.
     """
     return (angle1 % (2 * math.pi)) - (angle2 % (2 * math.pi))
@@ -59,11 +74,36 @@ class Ai:
         """ Main decision function that gets called on every tick of the game.
         """
         next(self.move_cycle)
+        self.maybe_shoot()
 
     def maybe_shoot(self):
         """ Makes a raycast query in front of the tank. If another tank
             or a wooden box is found, then we shoot.
         """
+        distance = 0.2
+        mid = self.tank.body.position
+        angle = self.tank.body.angle + math.pi/2
+
+        start_y = mid[1] + distance + math.sin(angle)
+        start_x = mid[0] + distance + math.cos(angle)
+        end_y = mid[1] + 9 * math.sin(angle)
+        end_x = mid[0] + 9 * math.cos(angle)
+
+        start = (start_x, start_y)
+        end = (end_x, end_y)
+
+        ray = self.space.segment_query_first(start, end, 0, pymunk.ShapeFilter())
+        if not ray:
+            return
+        res = ray.shape
+        if isinstance(res, pymunk.Segment):
+            return
+        if isinstance(res.parent, gameobjects.Tank):
+            self.game_objects_list.append(self.tank.shoot(self.space))
+        if isinstance(res.parent, gameobjects.Box):
+            if res.parent.destructable:
+                self.game_objects_list.append(self.tank.shoot(self.space))    
+
         pass  # To be implemented
 
     def move_cycle_gen(self):
@@ -109,6 +149,7 @@ class Ai:
                     paths[i] = queue[0]
             queue.popleft()
 
+
         shortest_path = []
         default = self.get_target_tile()
         shortest_path.append(default)
@@ -121,9 +162,8 @@ class Ai:
         shortest_path.pop()
         shortest_path.reverse()
 
-        #print(shortest_path)
         new_shortest_path = [tuple(value + 0.5 for value in tup) for tup in shortest_path]
-        #print(new_shortest_path)
+
         self.path = deque(new_shortest_path)
         return deque(new_shortest_path)
 
@@ -164,7 +204,7 @@ class Ai:
         y_coords = coord_vec[1]
 
         neighbors = [(x_coords + 1, y_coords),(x_coords + -1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
-
+        
         result = filter(self.filter_tile_neighbors, neighbors)  # This is your filter object
         result_list = list(result)  # Convert filter object to a list
 
@@ -176,18 +216,19 @@ class Ai:
         x_coords = coord[0]
         y_coords = coord[1]
         if x_coords < current_map.width and x_coords >= 0 and y_coords < current_map.height and y_coords >= 0:
-            if self.currentmap.boxes[y_coords][x_coords] == 0:
+            if self.currentmap.boxes[y_coords][x_coords] == 1:
+                return False
+            else:
                 return True
             
     def turn(self, next_coord):
         desired_angle = angle_between_vectors(self.tank.body.position, next_coord)
         angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
-        print(angle_diff)
 
         if angle_diff < MIN_ANGLE_DIF and angle_diff >= 0 or angle_diff > MIN_ANGLE_DIF and angle_diff <= 0:
             return True
         else:
-            if angle_diff < 0:
+            if angle_diff > 0:
                 self.tank.turn_right()
             else:
                 self.tank.turn_left()
@@ -196,7 +237,7 @@ class Ai:
     def correct_pos(self, next_coord):
         desired_pos = next_coord
         current_pos = self.tank.body.position
-        threshold = 0.2
+        threshold = 0.3
         
         if (desired_pos - current_pos).length <= threshold:
             self.update_grid_pos()
@@ -211,15 +252,11 @@ class Ai:
 
         if angle_diff < MIN_ANGLE_DIF and angle_diff >= 0 or angle_diff > MIN_ANGLE_DIF and angle_diff <= 0:
             self.tank.stop_turning()
-            print('ga')
             return True
         elif -angle_diff < MIN_ANGLE_DIF and -angle_diff >= 0 or -angle_diff > MIN_ANGLE_DIF and -angle_diff <= 0:
             self.tank.stop_turning()
-            print('sdf')
             return True
         else:
-            print('angle diff: ', angle_diff)
-            print('MIN_ANGLE DIF', MIN_ANGLE_DIF)
             return False
         
     def accelerate(self):

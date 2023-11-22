@@ -73,7 +73,7 @@ for i in range(0, len(current_map.start_positions)):
     # Create the tank, images.tanks contains the image representing the tank
     tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space)
     # Create the ai and add it to the ai list
-    if i < 2 and i > 0:
+    if i != 0:
         ai_tank = ai.Ai(tank, game_objects_list, tanks_list, space, current_map)
         ai_list.append(ai_tank)
     # Add the tank to the list of tanks
@@ -222,15 +222,15 @@ while running:
 
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             running = False
-        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
-            action_map[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
+        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
+            action_map2[event.key][event.type]()
+        elif event.type == KEYDOWN and event.key == K_p and tank.can_shoot == True:
             tank.can_shoot = False
             game_objects_list.append(tanks_list[0].shoot(space))
 
-        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
-            action_map2[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_o:
+        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
+            action_map[event.key][event.type]()
+        elif event.type == KEYDOWN and event.key == K_SPACE:
             game_objects_list.append(tanks_list[1].shoot(space))
             
 
@@ -264,12 +264,13 @@ while running:
         tank.post_update()
 
     # checks if a tank has shoot a bullet and therefore is supposed to have recoil
-    for tank in tanks_list:
-        tank.change_recoil()
+    # for tank in tanks_list:
+    #     tank.change_recoil()
 
     #   Update object that depends on an other object position (for instance a flag)
     for obj in game_objects_list:
-        obj.post_update()
+        obj.post_update()    # for tank in tanks_list:
+    #     tank.change_recoil()
 
     # -- Update Display
 

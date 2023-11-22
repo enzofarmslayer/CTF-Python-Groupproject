@@ -172,15 +172,15 @@ class Tank(GamePhysicsObject):
         self.rotation = 0
         self.body.angular_velocity = 0
     
-    def change_recoil(self):
-        if self.recoil == 1:
-            self.acceleration = -0.8
-            self.recoil_change = self.recoil_change - 1
-            if self.recoil_change < 0:
-                self.recoil = -1
-        elif self.recoil == -1:
-            self.accelerate()
-            self.recoil = 0
+    # def change_recoil(self):
+    #     if self.recoil == 1:
+    #         self.acceleration = -0.8
+    #         self.recoil_change = self.recoil_change - 1
+    #         if self.recoil_change < 0:
+    #             self.recoil = -1
+    #     elif self.recoil == -1:
+    #         self.accelerate()
+    #         self.recoil = 0
 
 
     def update(self):
@@ -236,8 +236,8 @@ class Tank(GamePhysicsObject):
 
     def shoot(self, space):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
-        self.recoil = 1
-        self.recoil_change = 3
+        # self.recoil = 1
+        # self.recoil_change = 3
         return Bullet(self, space)
     
     def respawn(self, flag):
