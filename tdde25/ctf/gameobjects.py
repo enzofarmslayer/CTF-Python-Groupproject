@@ -126,7 +126,7 @@ class Tank(GamePhysicsObject):
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
     ACCELERATION = 1.8
-    NORMAL_MAX_SPEED = 15.0
+    NORMAL_MAX_SPEED = 1.0
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 1
 
     def __init__(self, x, y, orientation, sprite, space):
@@ -145,11 +145,8 @@ class Tank(GamePhysicsObject):
         self.can_shoot = False
         self.recoil = 0
         self.recoil_change = 0
-<<<<<<< HEAD
         self.has_respawned = False
-=======
-        self.score = 0  #"Antalet vinster" börjar på 0
->>>>>>> 26f88f7c9e867a7facb9e0ad68fb627069114b26
+        self.score = 0
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -239,7 +236,7 @@ class Tank(GamePhysicsObject):
         """ Check if the current tank has won (if it is has the flag and it is close to its start position). """
         if self.flag is not None and (self.start_position - self.body.position).length < 0.2:
             self.score += 1
-            print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
+            #print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
             return True
         else: 
             return False

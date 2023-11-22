@@ -159,7 +159,8 @@ def collision_bullet_tank(arb, space, data):
     bullet = arb.shapes[0].parent
     tank = arb.shapes[1].parent
     
-    if bullet.shooter == tank: 
+    if bullet.shooter == tank:
+        shooting_sound() 
         return False
     
     if bullet in game_objects_list:
