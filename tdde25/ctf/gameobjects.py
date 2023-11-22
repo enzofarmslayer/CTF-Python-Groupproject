@@ -145,6 +145,7 @@ class Tank(GamePhysicsObject):
         self.can_shoot = False
         self.recoil = 0
         self.recoil_change = 0
+        self.score = 0  #"Antalet vinster" börjar på 0
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -232,7 +233,12 @@ class Tank(GamePhysicsObject):
 
     def has_won(self):
         """ Check if the current tank has won (if it is has the flag and it is close to its start position). """
-        return self.flag is not None and (self.start_position - self.body.position).length < 0.2
+        if self.flag is not None and (self.start_position - self.body.position).length < 0.2:
+            self.score += 1
+            print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
+            return True
+        else: 
+            return False
 
     def shoot(self, space):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
