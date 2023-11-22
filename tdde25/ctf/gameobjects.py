@@ -125,8 +125,8 @@ class Tank(GamePhysicsObject):
 
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
-    ACCELERATION = 0.8
-    NORMAL_MAX_SPEED = 2.0
+    ACCELERATION = 1.8
+    NORMAL_MAX_SPEED = 15.0
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 1
 
     def __init__(self, x, y, orientation, sprite, space):
@@ -145,6 +145,7 @@ class Tank(GamePhysicsObject):
         self.can_shoot = False
         self.recoil = 0
         self.recoil_change = 0
+        self.has_respawned = False
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -246,6 +247,7 @@ class Tank(GamePhysicsObject):
             flag.is_on_tank = False
         self.body.position = self.start_position
         self.body.angle = self.start_orientation
+        self.has_respawned = True
     
     
 class Bullet(GamePhysicsObject):

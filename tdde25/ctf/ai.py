@@ -98,11 +98,13 @@ class Ai:
         res = ray.shape
         if isinstance(res, pymunk.Segment):
             return
-        if isinstance(res.parent, gameobjects.Tank):
+        if isinstance(res.parent, gameobjects.Tank) and self.tank.can_shoot == True:
+            self.tank.can_shoot = False
             self.game_objects_list.append(self.tank.shoot(self.space))
         if isinstance(res.parent, gameobjects.Box):
-            if res.parent.destructable:
-                self.game_objects_list.append(self.tank.shoot(self.space))    
+            if res.parent.destructable and self.tank.can_shoot == True:
+                self.tank.can_shoot = False
+                self.game_objects_list.append(self.tank.shoot(self.space))
 
         pass  # To be implemented
 
@@ -116,13 +118,22 @@ class Ai:
             if not shortest_path:
                 yield
                 continue
+            # if self.grid_pos == self.get_tile_of_position(self.tank.start_position):
+            #     shortest_path.popleft()
             next_coord = shortest_path.popleft()
+            
             yield
+            if self.tank.has_respawned == True:
+                self.update_grid_pos()
+                self.tank.stop_moving()
+                shortest_path = self.find_shortest_path()
+                next_coord = shortest_path.popleft()
+                self.tank.has_respawned = False
             self.turn(next_coord)
             while not self.correct_angle(next_coord):
                 yield
             self.accelerate()
-            while not self.correct_pos(next_coord):
+            while not self.correct_pos(next_coord) and self.tank.has_respawned == False:
                 yield
  
 
@@ -141,12 +152,14 @@ class Ai:
         while len(queue) >= 1:
             tile_neighbors = self.get_tile_neighbors(queue[0])
             if queue[0] == self.get_target_tile():
+                # paths[queue[0]] = queue[0]
                 break
             for i in tile_neighbors:
                 if i not in visited:
                     queue.append(i)
                     visited.add(i)
                     paths[i] = queue[0]
+                    print(queue[0])
             queue.popleft()
 
 
@@ -154,6 +167,8 @@ class Ai:
         default = self.get_target_tile()
         shortest_path.append(default)
         while True:
+            if not paths:
+                break
             add = paths[default]
             shortest_path.append(add)
             default = add
@@ -163,7 +178,6 @@ class Ai:
         shortest_path.reverse()
 
         new_shortest_path = [tuple(value + 0.5 for value in tup) for tup in shortest_path]
-
         self.path = deque(new_shortest_path)
         return deque(new_shortest_path)
 
@@ -237,7 +251,7 @@ class Ai:
     def correct_pos(self, next_coord):
         desired_pos = next_coord
         current_pos = self.tank.body.position
-        threshold = 0.3
+        threshold = 0.2
         
         if (desired_pos - current_pos).length <= threshold:
             self.update_grid_pos()
