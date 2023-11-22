@@ -26,6 +26,7 @@ import images
 import gameobjects
 import maps
 import sounds
+from sounds import *
 
 # -- Constants
 FRAMERATE = 50
