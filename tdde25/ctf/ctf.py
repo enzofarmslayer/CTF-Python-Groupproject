@@ -25,6 +25,7 @@ import ai
 import images
 import gameobjects
 import maps
+import sounds
 
 # -- Constants
 FRAMERATE = 50
