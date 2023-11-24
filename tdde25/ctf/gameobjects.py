@@ -251,7 +251,7 @@ class Tank(GamePhysicsObject):
         """ Check if the current tank has won (if it is has the flag and it is close to its start position). """
         if self.flag is not None and (self.start_position - self.body.position).length < 0.2:
             self.score += 1
-            # print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
+            print(f"{self.score}")
             return True
         else: 
             return False
@@ -266,6 +266,7 @@ class Tank(GamePhysicsObject):
         if flag.is_on_tank:
             self.flag = None
             flag.is_on_tank = False
+            flag.respawn()
         self.body.position = self.start_position
         self.body.angle = self.start_orientation
         self.has_respawned = True
@@ -353,6 +354,13 @@ class Flag(GameVisibleObject):
     def __init__(self, x, y):
         self.is_on_tank = False
         super().__init__(x, y, images.flag)
+
+    def respawn(self):
+        self.x = 4.5
+        self.y = 4.5
+        self.orientation = 0
+    
+
 
 
 

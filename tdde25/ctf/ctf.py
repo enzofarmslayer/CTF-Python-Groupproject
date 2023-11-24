@@ -261,6 +261,8 @@ while running:
         tank.try_grab_flag(flag)
         if tank.has_won():
             tank.respawn(flag)
+            for tank in tanks_list:
+                tank.respawn(flag)
 
     #   Checks if a tank has the flag if true change the position of the flag to that tank
     for tank in tanks_list:
