@@ -65,6 +65,7 @@ class Ai:
         self.move_cycle = self.move_cycle_gen()
         self.update_grid_pos()
         self.next_coord = None
+        self.prev_coord = 10
 
     def update_grid_pos(self):
         """ This should only be called in the beginning, or at the end of a move_cycle. """
@@ -127,8 +128,11 @@ class Ai:
                 self.update_grid_pos()
                 self.tank.stop_moving()
                 shortest_path = self.find_shortest_path()
-                next_coord = shortest_path.popleft()
-                self.tank.has_respawned = False
+                if not shortest_path:
+                    next_coord = self.tank.body.position
+                else:
+                    next_coord = shortest_path.popleft()
+                    self.tank.has_respawned = False
             self.turn(next_coord)
             while not self.correct_angle(next_coord):
                 yield
@@ -252,11 +256,13 @@ class Ai:
         current_pos = self.tank.body.position
         threshold = 0.2
         
-        if (desired_pos - current_pos).length <= threshold:
+        if (desired_pos - current_pos).length > self.prev_coord:
             self.update_grid_pos()
             self.tank.stop_moving()
+            self.prev_coord = 10
             return True
         else:
+            self.prev_coord = (desired_pos - current_pos).length
             return False
         
     def correct_angle(self, next_coord):
