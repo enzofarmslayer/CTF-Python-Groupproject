@@ -4,6 +4,7 @@ import math
 import pygame
 import pymunk
 import images
+import copy
 
 
 DEBUG = False  # Change this to set it in debug mode
@@ -126,7 +127,7 @@ class Tank(GamePhysicsObject):
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
     ACCELERATION = 1.8
-    NORMAL_MAX_SPEED = 1.0
+    NORMAL_MAX_SPEED = 3.0
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 1
 
     def __init__(self, x, y, orientation, sprite, space):
@@ -147,6 +148,7 @@ class Tank(GamePhysicsObject):
         self.recoil_change = 0
         self.has_respawned = False
         self.score = 0
+        self.direction = 0
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -174,15 +176,28 @@ class Tank(GamePhysicsObject):
         self.rotation = 0
         self.body.angular_velocity = 0
     
-    # def change_recoil(self):
-    #     if self.recoil == 1:
-    #         self.acceleration = -0.8
-    #         self.recoil_change = self.recoil_change - 1
-    #         if self.recoil_change < 0:
-    #             self.recoil = -1
-    #     elif self.recoil == -1:
-    #         self.accelerate()
-    #         self.recoil = 0
+    def change_recoil(self):
+        RECOIL = -0.8
+        if self.acceleration != RECOIL:
+            self.direction = copy.deepcopy(self.acceleration)
+
+        if self.recoil == 1:
+            if self.direction < 0:
+                self.acceleration = RECOIL * 20 + self.acceleration
+                self.max_speed = 10
+            self.acceleration = RECOIL
+            self.recoil_change = self.recoil_change - 1
+            if self.recoil_change < 0:
+                self.recoil = -1
+                self.max_speed = self.NORMAL_MAX_SPEED
+        elif self.recoil == -1:
+            if self.direction == 0:
+                self.stop_moving()
+            elif self.direction > 0:
+                self.accelerate()
+            else:
+                self.decelerate()
+            self.recoil = 0
 
 
     def update(self):
@@ -236,15 +251,15 @@ class Tank(GamePhysicsObject):
         """ Check if the current tank has won (if it is has the flag and it is close to its start position). """
         if self.flag is not None and (self.start_position - self.body.position).length < 0.2:
             self.score += 1
-            #print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
+            # print(f"Spelare {tanks_list.index(self) + 1}: {self.score}")
             return True
         else: 
             return False
 
     def shoot(self, space):
         """ Call this function to shoot a missile (current implementation does nothing ! you need to implement it yourself) """
-        # self.recoil = 1
-        # self.recoil_change = 3
+        self.recoil = 1
+        self.recoil_change = 3
         return Bullet(self, space)
     
     def respawn(self, flag):

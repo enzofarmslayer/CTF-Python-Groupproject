@@ -159,7 +159,6 @@ class Ai:
                     queue.append(i)
                     visited.add(i)
                     paths[i] = queue[0]
-                    print(queue[0])
             queue.popleft()
 
 

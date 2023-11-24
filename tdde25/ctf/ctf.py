@@ -75,7 +75,7 @@ for i in range(0, len(current_map.start_positions)):
     # Create the tank, images.tanks contains the image representing the tank
     tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space)
     # Create the ai and add it to the ai list
-    if i != 0:
+    if i == 10:
         ai_tank = ai.Ai(tank, game_objects_list, tanks_list, space, current_map)
         ai_list.append(ai_tank)
     # Add the tank to the list of tanks
@@ -267,8 +267,8 @@ while running:
         tank.post_update()
 
     # checks if a tank has shoot a bullet and therefore is supposed to have recoil
-    # for tank in tanks_list:
-    #     tank.change_recoil()
+    for tank in tanks_list:
+        tank.change_recoil()
 
     #   Update object that depends on an other object position (for instance a flag)
     for obj in game_objects_list:
