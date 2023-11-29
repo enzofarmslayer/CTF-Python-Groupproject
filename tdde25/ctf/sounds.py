@@ -10,7 +10,7 @@ mixer.music.load("data/GM13.mp3")
 bulllet_sound = mixer.Sound("data/Shooting.wav")
 explosion_sound = mixer.Sound("data/Explosion.wav")
 flag_sound = mixer.Sound("data/Victor_sound.wav")
-#wooden_box = mixer.Sound("data/asdf.wav")
+wooden_box = mixer.Sound("data/wood.wav")
 #Background music
 mixer.music.play(-1)
 
