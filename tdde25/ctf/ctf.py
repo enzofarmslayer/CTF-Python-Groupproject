@@ -1,11 +1,14 @@
 """ Main file for the game.
 """
+from sounds import *
 import pygame
 from pygame.locals import *
 from pygame.color import *
 import pymunk
 
 # ----- Initialisation ----- #
+
+# -- Initialise the sounds
 
 # -- Initialise the display
 pygame.init()
@@ -25,8 +28,7 @@ import ai
 import images
 import gameobjects
 import maps
-import sounds
-from sounds import *
+
 
 # -- Constants
 FRAMERATE = 50
@@ -154,20 +156,24 @@ space.add(*edges)
 for edge in edges:
     edge.collision_type = 4
 
-# Collistions
+# Collisions
 def collision_bullet_tank(arb, space, data):
-
     bullet = arb.shapes[0].parent
     tank = arb.shapes[1].parent
+
     
     if bullet.shooter == tank:
-        shooting_sound() 
         return False
+    
+    
+    explosion()
+
     
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
     if tank in tanks_list:
+        #explosion()
         # tanks_list.remove(tank)
         # space.remove(arb.shapes[1], arb.shapes[1].body)
         # tanks_list.append(tank)
@@ -180,8 +186,8 @@ def collision_bullet_box(arb, space, data):
 
     bullet = arb.shapes[0].parent
     box = arb.shapes[1].parent
-
     if box in game_objects_list and box.destructable:
+        #explosion()
         game_objects_list.remove(box)
         space.remove(arb.shapes[1], arb.shapes[1].body)
     if bullet in game_objects_list:
@@ -230,11 +236,13 @@ while running:
         elif event.type == KEYDOWN and event.key == K_p and tank.can_shoot == True:
             tank.can_shoot = False
             game_objects_list.append(tanks_list[0].shoot(space))
+            shooting_sound()
 
         elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
             action_map[event.key][event.type]()
         elif event.type == KEYDOWN and event.key == K_SPACE:
             game_objects_list.append(tanks_list[1].shoot(space))
+            shooting_sound()
             
 
 
