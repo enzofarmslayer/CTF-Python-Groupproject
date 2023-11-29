@@ -162,16 +162,14 @@ def collision_bullet_tank(arb, space, data):
     tank = arb.shapes[1].parent
 
     
-    if bullet.shooter == tank:
+    if bullet.shooter == tank or tank.is_protected:
         return False
-    shooting_sound()
     explosion()
 
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
     if tank in tanks_list:
-        #explosion()
         # tanks_list.remove(tank)
         # space.remove(arb.shapes[1], arb.shapes[1].body)
         # tanks_list.append(tank)

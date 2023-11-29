@@ -149,6 +149,9 @@ class Tank(GamePhysicsObject):
         self.has_respawned = False
         self.score = 0
         self.direction = 0
+        self.is_protected = False
+        self.protection_duration = 50000 #in ticks
+        self.protection_timer = 0
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -216,6 +219,11 @@ class Tank(GamePhysicsObject):
         self.body.angular_velocity += self.rotation * self.ACCELERATION
         self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
 
+        if self.is_protected:
+            self.protection_timer -= 1
+            if self.protection_timer <= 0:
+                self.is_protected = False
+
     def post_update(self):
        
         if self.can_shoot == False:
@@ -272,6 +280,8 @@ class Tank(GamePhysicsObject):
         self.body.position = self.start_position
         self.body.angle = self.start_orientation
         self.has_respawned = True
+        self.is_protected = True # När tanken spawnar är den skyddad abadabing
+        self.protection_timer = self.protection_duration #tiden som den är skyddad är lika lång som duration
     
     
 class Bullet(GamePhysicsObject):
