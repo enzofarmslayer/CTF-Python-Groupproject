@@ -164,7 +164,7 @@ def collision_bullet_tank(arb, space, data):
     
     if bullet.shooter == tank:
         return False
-    
+    shooting_sound()
     explosion()
 
     if bullet in game_objects_list:
@@ -265,7 +265,7 @@ while running:
     #   Check if tank in in range to capture the flag
     for tank in tanks_list:
         tank.try_grab_flag(flag)
-        if tank.has_won():
+        if tank.has_won(tanks_list):
             captured_the_flag()
             tank.respawn(flag)
             for tank in tanks_list:

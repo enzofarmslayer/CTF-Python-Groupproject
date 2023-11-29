@@ -127,7 +127,7 @@ class Tank(GamePhysicsObject):
     # Constant values for the tank, acessed like: Tank.ACCELERATION
     # You can add more constants here if needed later
     ACCELERATION = 1.2
-    NORMAL_MAX_SPEED = 1.0
+    NORMAL_MAX_SPEED = 1.5
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 0.75
 
     def __init__(self, x, y, orientation, sprite, space):
@@ -247,11 +247,13 @@ class Tank(GamePhysicsObject):
                 flag.is_on_tank = True
                 self.max_speed = Tank.FLAG_MAX_SPEED
 
-    def has_won(self):
+    def has_won(self, tanks_list):
         """ Check if the current tank has won (if it is has the flag and it is close to its start position). """
         if self.flag is not None and (self.start_position - self.body.position).length < 0.2:
             self.score += 1
-            print(f"{self.score}")
+
+            for i, tank in enumerate(tanks_list): #OBS enumerate "skapar" index för varje element
+                print(f"Player {i + 1}: {tank.score}")
             return True
         else: 
             return False
