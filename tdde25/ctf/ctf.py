@@ -165,10 +165,8 @@ def collision_bullet_tank(arb, space, data):
     if bullet.shooter == tank:
         return False
     
-    
     explosion()
 
-    
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
@@ -187,7 +185,7 @@ def collision_bullet_box(arb, space, data):
     bullet = arb.shapes[0].parent
     box = arb.shapes[1].parent
     if box in game_objects_list and box.destructable:
-        #explosion()
+        wood_box()
         game_objects_list.remove(box)
         space.remove(arb.shapes[1], arb.shapes[1].body)
     if bullet in game_objects_list:
@@ -268,6 +266,7 @@ while running:
     for tank in tanks_list:
         tank.try_grab_flag(flag)
         if tank.has_won():
+            captured_the_flag()
             tank.respawn(flag)
             for tank in tanks_list:
                 tank.respawn(flag)
