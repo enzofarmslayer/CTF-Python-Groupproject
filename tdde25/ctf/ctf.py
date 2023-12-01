@@ -47,6 +47,10 @@ screen = pygame.display.set_mode(current_map.rect().size)
 #-- Generate the background
 background = pygame.Surface(screen.get_size())
 
+def vis_explosion(bullet):
+    explosion = gameobjects.Explosion(bullet.body.position[0], bullet.body.position[1])
+    game_objects_list.append(explosion)
+
 #   Copy the grass tile all over the level area
 for x in range(0, current_map.width):
     for y in range(0,  current_map.height):
@@ -169,7 +173,6 @@ def collision_bullet_tank(arb, space, data):
     if bullet.shooter == tank or tank.is_protected:
         return False
     explosion()
-
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
@@ -180,12 +183,15 @@ def collision_bullet_tank(arb, space, data):
         # space.add(arb.shapes[1], arb.shapes[1].body)
         tank.respawn(flag)
     
+    vis_explosion(bullet)
+
     return False
 
 def collision_bullet_box(arb, space, data):
 
     bullet = arb.shapes[0].parent
     box = arb.shapes[1].parent
+    
     if box in game_objects_list and box.destructable:
         wood_box()
         game_objects_list.remove(box)
@@ -193,6 +199,8 @@ def collision_bullet_box(arb, space, data):
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
+
+    vis_explosion(bullet)
 
     return False
 
@@ -202,6 +210,8 @@ def collision_bullet_border(arb, space, data):
     if bullet in game_objects_list:
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
+
+    vis_explosion(bullet)
 
     return False
 
@@ -288,7 +298,14 @@ while running:
 
     # -- Update Display
 
+    for obj in game_objects_list:
+        if isinstance(obj, gameobjects.Explosion):
+            if obj.disappear == True:
+                game_objects_list.remove(obj)
+
+
     # Display the background on the screen
+    
     screen.blit(background, (0, 0))
 
 

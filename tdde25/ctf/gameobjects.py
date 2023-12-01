@@ -366,6 +366,18 @@ class GameVisibleObject(GameObject):
         return self.orientation
     
 
+class Explosion(GameVisibleObject):
+    def __init__(self, x, y):
+        super().__init__(x, y, images.explosion)
+        self.tick = 0 
+        self.disappear = False
+
+    def post_update(self):
+        if self.tick > 10:
+            self.tick = 0
+            self.disappear = True
+        else:
+            self.tick += 1
 
 class Flag(GameVisibleObject):
     """ This class extends GameVisibleObject for representing flags."""
