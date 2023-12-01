@@ -130,7 +130,7 @@ class Tank(GamePhysicsObject):
     NORMAL_MAX_SPEED = 1.5
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 0.75
 
-    def __init__(self, x, y, orientation, sprite, space):
+    def __init__(self, x, y, orientation, sprite, space, ai):
         super().__init__(x, y, orientation, sprite, space, True)
         # Define variable used to apply motion to the tanks
         self.acceleration = 0  # 1 forward, 0 for stand still, -1 for backwards
@@ -150,8 +150,9 @@ class Tank(GamePhysicsObject):
         self.score = 0
         self.direction = 0
         self.is_protected = False
-        self.protection_duration = 50000 #in ticks
+        self.protection_duration = 50 #in ticks
         self.protection_timer = 0
+        self.is_ai = ai
 
     def accelerate(self):
         """ Call this function to make the tank move forward. """
@@ -212,12 +213,18 @@ class Tank(GamePhysicsObject):
         self.body.velocity += acceleration_vector
 
         # Makes sure that we dont exceed our speed limit
-        velocity = clamp(self.max_speed, self.body.velocity.length)
+        if self.is_ai:
+            velocity = clamp((self.max_speed + 1), self.body.velocity.length)
+        else:
+            velocity = clamp(self.max_speed, self.body.velocity.length)
         self.body.velocity = pymunk.Vec2d(velocity, 0).rotated(self.body.velocity.angle)
 
         # Updates the rotation
         self.body.angular_velocity += self.rotation * self.ACCELERATION
-        self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
+        if self.is_ai:
+            self.body.angular_velocity = clamp((self.max_speed + 1), self.body.angular_velocity)
+        else:
+            self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
 
         if self.is_protected:
             self.protection_timer -= 1

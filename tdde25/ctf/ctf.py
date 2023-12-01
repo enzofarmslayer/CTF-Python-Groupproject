@@ -75,11 +75,15 @@ for i in range(0, len(current_map.start_positions)):
     # Get the starting position of the tank "i"
     pos = current_map.start_positions[i]
     # Create the tank, images.tanks contains the image representing the tank
-    tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space)
+
     # Create the ai and add it to the ai list
     if i != 1 and i != 3:
+        tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space, True)
         ai_tank = ai.Ai(tank, game_objects_list, tanks_list, space, current_map)
         ai_list.append(ai_tank)
+    else:
+        tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space, False)
+    
     # Add the tank to the list of tanks
     tanks_list.append(tank)
 
@@ -236,7 +240,8 @@ while running:
 
         elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
             action_map[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_SPACE:
+        elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
+            tank.can_shoot = False
             game_objects_list.append(tanks_list[1].shoot(space))
             shooting_sound()
             
