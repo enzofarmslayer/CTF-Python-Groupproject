@@ -28,6 +28,7 @@ import ai
 import images
 import gameobjects
 import maps
+import sys
 
 
 # -- Constants
@@ -72,8 +73,26 @@ for x in range(0, current_map.width):
             box = gameobjects.get_box_with_type(x, y, box_type, space)
             game_objects_list.append(box)
 
+# Singleplayer or Multiplayer in command line
+if len(sys.argv) > 2:
+    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+
+if len(sys.argv) == 1 or sys.argv[1] == "--singleplayer":
+    singleplayer = True
+    multiplayer = False
+elif sys.argv[1] == "--hot-multiplayer":
+    singleplayer = False
+    multiplayer = True
+else:
+    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+
 
 #-- Create the tanks
+if singleplayer == True:
+    player_tank_index = 0
+else:
+    player_tank_index = 1
+
 # Loop over the starting poistion
 for i in range(0, len(current_map.start_positions)):
     # Get the starting position of the tank "i"
@@ -81,7 +100,7 @@ for i in range(0, len(current_map.start_positions)):
     # Create the tank, images.tanks contains the image representing the tank
 
     # Create the ai and add it to the ai list
-    if i != 1 and i != 3:
+    if i > player_tank_index:
         tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space, True)
         ai_tank = ai.Ai(tank, game_objects_list, tanks_list, space, current_map)
         ai_list.append(ai_tank)
@@ -241,19 +260,19 @@ while running:
 
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             running = False
-        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
-            action_map2[event.key][event.type]()
+        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
+            action_map[event.key][event.type]()
         elif event.type == KEYDOWN and event.key == K_p and tank.can_shoot == True:
             tank.can_shoot = False
             game_objects_list.append(tanks_list[0].shoot(space))
             shooting_sound()
-
-        elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
-            action_map[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
-            tank.can_shoot = False
-            game_objects_list.append(tanks_list[1].shoot(space))
-            shooting_sound()
+        if multiplayer == True:
+            if event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
+                action_map2[event.key][event.type]()
+            elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
+                tank.can_shoot = False
+                game_objects_list.append(tanks_list[1].shoot(space))
+                shooting_sound()
             
 
 
