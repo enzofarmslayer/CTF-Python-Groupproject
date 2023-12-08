@@ -91,8 +91,8 @@ class GamePhysicsObject(GameObject):
         self.shape.parent = self
 
         # Set some value for friction and elasticity, which defines interraction in case of a colision
-        # self.shape.friction = 0.5
-        # self.shape.elasticity = 0.1
+        self.shape.friction = 0.5
+        self.shape.elasticity = 0.1
 
         # Add the object to the physic engine
         space.add(self.body, self.shape)
@@ -135,9 +135,9 @@ class Tank(GamePhysicsObject):
         # Define variable used to apply motion to the tanks
         self.acceleration = 0  # 1 forward, 0 for stand still, -1 for backwards
         self.rotation = 0  # 1 clockwise, 0 for no rotation, -1 counter clockwise
+        self.shape.parent = self
         self.shape.collision_type = 2 #
         #self.shape = pymunk.Poly()
-        self.shape.parent = self
         self.flag = None                      # This variable is used to access the flag object, if the current tank is carrying the flag
         self.max_speed = Tank.NORMAL_MAX_SPEED     # Impose a maximum speed to the tank
         self.start_position = pymunk.Vec2d(x, y)        # Define the start position, which is also the position where the tank has to return with the flag
@@ -214,7 +214,7 @@ class Tank(GamePhysicsObject):
 
         # Makes sure that we dont exceed our speed limit
         if self.is_ai:
-            velocity = clamp((self.max_speed + 1), self.body.velocity.length)
+            velocity = clamp((self.max_speed*1.3), self.body.velocity.length)
         else:
             velocity = clamp(self.max_speed, self.body.velocity.length)
         self.body.velocity = pymunk.Vec2d(velocity, 0).rotated(self.body.velocity.angle)
@@ -222,7 +222,7 @@ class Tank(GamePhysicsObject):
         # Updates the rotation
         self.body.angular_velocity += self.rotation * self.ACCELERATION
         if self.is_ai:
-            self.body.angular_velocity = clamp((self.max_speed + 1), self.body.angular_velocity)
+            self.body.angular_velocity = clamp((self.max_speed*1.3), self.body.angular_velocity)
         else:
             self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
 
@@ -301,11 +301,14 @@ class Bullet(GamePhysicsObject):
         super().__init__(tank.body.position[0], tank.body.position[1], math.degrees(tank.body.angle), images.bullet, space, True)
         self.angle = tank.body.angle 
         self.shooter = tank
+        self.parrent_is_ai = tank.is_ai
         self.shape.collision_type = 1 #
 
     def update(self):
-        #self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
-        self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
+        if self.parrent_is_ai:
+            self.body.velocity = (pymunk.Vec2d(5*1.5, 0).rotated(self.angle + math.radians(90)))
+        else:
+            self.body.velocity = (pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90)))
 
     #def post_update(self):
     #     # Creates a vector in the direction we want accelerate / decelerate
