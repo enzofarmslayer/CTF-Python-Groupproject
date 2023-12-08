@@ -340,4 +340,3 @@ while running:
 
     #   Control the game framerate
     clock.tick(FRAMERATE)
-#test
