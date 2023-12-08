@@ -86,7 +86,7 @@ class GamePhysicsObject(GameObject):
             self.body = pymunk.Body(body_type=pymunk.Body.STATIC)  # Create a non movable (static) object
 
         self.body.position = x, y
-        self.body.angle = math.radians(orientation)       # orientation is provided in degress, but pymunk expects radians.
+        self.body.angle = math.radians(orientation)  # orientation is provided in degress, but pymunk expects radians.
         self.shape = pymunk.Poly(self.body, points)  # Create a polygon shape using the corner of the rectangle
         self.shape.parent = self
         # Set some value for friction and elasticity, which defines interraction in case of a colision

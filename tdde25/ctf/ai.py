@@ -172,6 +172,8 @@ class Ai:
         while True:
             if not paths:
                 break
+            if default not in paths:
+                break
             add = paths[default]
             shortest_path.append(add)
             default = add
