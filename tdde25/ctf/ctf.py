@@ -231,7 +231,6 @@ def collision_bullet_border(arb, space, data):
 
     return False
 
-
 handler = space.add_collision_handler(1, 2)
 handler.pre_solve = collision_bullet_tank
 handler = space.add_collision_handler(1, 3)

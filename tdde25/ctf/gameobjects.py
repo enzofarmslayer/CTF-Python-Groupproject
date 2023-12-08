@@ -89,9 +89,8 @@ class GamePhysicsObject(GameObject):
         self.body.angle = math.radians(orientation)       # orientation is provided in degress, but pymunk expects radians.
         self.shape = pymunk.Poly(self.body, points)  # Create a polygon shape using the corner of the rectangle
         self.shape.parent = self
-
         # Set some value for friction and elasticity, which defines interraction in case of a colision
-        self.shape.friction = 0.5
+        self.shape.friction = 1000
         self.shape.elasticity = 0.1
 
         # Add the object to the physic engine
@@ -269,7 +268,7 @@ class Tank(GamePhysicsObject):
 
             for i, tank in enumerate(tanks_list): #OBS enumerate "skapar" index för varje element
                 print(f"Player {i + 1}: {tank.score}")
-                print("-----------")
+            print("-----------")
             return True
         else: 
             return False
@@ -325,6 +324,7 @@ class Box(GamePhysicsObject):
         super().__init__(x, y, 0, sprite, space, movable)
         self.destructable = destructable
         self.shape.collision_type = 3 # Collision type
+        self.movable = movable
 
 
 def get_box_with_type(x, y, type, space):
@@ -380,9 +380,10 @@ class Flag(GameVisibleObject):
 
     def __init__(self, x, y):
         self.is_on_tank = False
+        self.start_position = pymunk.Vec2d(x, y)  
         super().__init__(x, y, images.flag)
 
     def respawn(self):
-        self.x = 4.5
-        self.y = 4.5
+        self.x = self.start_position[0]
+        self.y = self.start_position[1]
         self.orientation = 0
