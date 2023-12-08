@@ -239,14 +239,15 @@ handler = space.add_collision_handler(1, 4)
 handler.pre_solve = collision_bullet_border
 
 
-    # Edges for game map
+# Edges for game map
 edges = [
-    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), (0.0)),
-    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), (0.0)),
-    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), (0.0)),
-    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), (0.0))
+    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), 0.2),
+    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), 0.2),
+    pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), 0.2),
+    pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), 0.2)
 ]
-space.add(*edges)
+for edge in edges:
+    space.add(edge)
 
 while running:
     # -- Handle the events
