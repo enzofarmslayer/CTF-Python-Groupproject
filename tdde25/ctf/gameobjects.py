@@ -386,8 +386,3 @@ class Flag(GameVisibleObject):
         self.x = 4.5
         self.y = 4.5
         self.orientation = 0
-    
-
-
-
-
