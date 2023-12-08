@@ -90,7 +90,7 @@ class GamePhysicsObject(GameObject):
         self.shape = pymunk.Poly(self.body, points)  # Create a polygon shape using the corner of the rectangle
         self.shape.parent = self
         # Set some value for friction and elasticity, which defines interraction in case of a colision
-        self.shape.friction = 1000
+        self.shape.friction = 0.5
         self.shape.elasticity = 0.1
 
         # Add the object to the physic engine
