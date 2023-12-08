@@ -196,10 +196,6 @@ def collision_bullet_tank(arb, space, data):
         game_objects_list.remove(bullet)
         space.remove(arb.shapes[0], arb.shapes[0].body)
     if tank in tanks_list:
-        # tanks_list.remove(tank)
-        # space.remove(arb.shapes[1], arb.shapes[1].body)
-        # tanks_list.append(tank)
-        # space.add(arb.shapes[1], arb.shapes[1].body)
         tank.respawn(flag)
     
     vis_explosion(bullet)
@@ -275,7 +271,6 @@ while running:
                 shooting_sound()
             
 
-
     # -- Update physics
     if skip_update == 0:
         # Loop over all the game objects and update their speed in function of their
@@ -327,7 +322,6 @@ while running:
     
     screen.blit(background, (0, 0))
 
-
     # Update the display of the game objects on the screen
     for obj in game_objects_list:
         obj.update_screen(screen)
@@ -345,10 +339,3 @@ while running:
 
     #   Control the game framerate
     clock.tick(FRAMERATE)
-
-# borders = []
-# borders.append ()
-# borders.append ()
-# borders.append ()
-# borders.append ()
-# space.add.borders

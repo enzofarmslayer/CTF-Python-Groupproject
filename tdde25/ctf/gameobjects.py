@@ -269,6 +269,7 @@ class Tank(GamePhysicsObject):
 
             for i, tank in enumerate(tanks_list): #OBS enumerate "skapar" index för varje element
                 print(f"Player {i + 1}: {tank.score}")
+                print("-----------")
             return True
         else: 
             return False
@@ -288,7 +289,7 @@ class Tank(GamePhysicsObject):
         self.body.angle = self.start_orientation
         self.has_respawned = True
         self.is_protected = True # När tanken spawnar är den skyddad abadabing
-        self.protection_timer = self.protection_duration #tiden som den är skyddad är lika lång som duration
+        self.protection_timer = self.protection_duration # Tiden som tanken är skyddad är lika lång som duration
     
     
 class Bullet(GamePhysicsObject):
@@ -301,12 +302,7 @@ class Bullet(GamePhysicsObject):
         self.angle = tank.body.angle 
         self.shooter = tank
         self.shape.collision_type = 1 #
-        #self.shape = pymunk.Poly()
-        #self.shape.parent = self
 
-
-        # self.angle = tank.body.angle
-        # self.body.velocity = pymunk.Vec2d(10, 0).rotated(self.angle + math.radians(90))
     def update(self):
         #self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
         self.body.velocity = pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90))
@@ -316,10 +312,7 @@ class Bullet(GamePhysicsObject):
     #     acceleration_vector = pymunk.Vec2d(8, 0).rotated(self.angle + math.radians(90))
     #     # Applies the vector to our velocity
     #     self.body.velocity += acceleration_vector
-
-    #     # Makes sure that we dont exceed our speed limit
-    #     velocity = clamp(self.max_speed, self.body.velocity.length)
-    #     self.body.velocity = pymunk.Vec2d(velocity, 0).rotated(self.body.velocity.angle)
+    
 
 class Box(GamePhysicsObject):
     """ This class extends the GamePhysicsObject to handle box objects. """
