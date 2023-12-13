@@ -260,7 +260,6 @@ while running:
                 game_objects_list.append(tanks_list[1].shoot(space))
                 shooting_sound()
             
-
     # -- Update physics
     if skip_update == 0:
         # Loop over all the game objects and update their speed in function of their
@@ -287,29 +286,19 @@ while running:
             tank.respawn(flag)
             for tank in tanks_list:
                 tank.respawn(flag)
-
-    #   Checks if a tank has the flag if true change the position of the flag to that tank
-    for tank in tanks_list:
         tank.post_update()
-
-    # checks if a tank has shoot a bullet and therefore is supposed to have recoil
-    for tank in tanks_list:
         tank.change_recoil()
 
     #   Update object that depends on an other object position (for instance a flag)
     for obj in game_objects_list:
-        obj.post_update()    # for tank in tanks_list:
+        obj.post_update() 
 
-    # -- Update Display
-
-    for obj in game_objects_list:
         if isinstance(obj, gameobjects.Explosion):
             if obj.disappear == True:
                 game_objects_list.remove(obj)
 
 
     # Display the background on the screen
-    
     screen.blit(background, (0, 0))
 
     # Update the display of the game objects on the screen
@@ -318,7 +307,7 @@ while running:
 
     # Update the display of the tanks on the screen
     for tank in tanks_list:
-        tank.update_screen(screen)
+         tank.update_screen(screen)
 
     # Updating ai
     for tank_ai in ai_list:
