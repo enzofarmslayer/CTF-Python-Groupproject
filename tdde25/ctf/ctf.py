@@ -46,11 +46,13 @@ ai_list = []
 screen = pygame.display.set_mode(current_map.rect().size)
 
 #-- Generate the background
-background = pygame.Surface(screen.get_size())
+background =pygame.Surface(screen.get_size())
+
 
 def vis_explosion(bullet):
     explosion = gameobjects.Explosion(bullet.body.position[0], bullet.body.position[1])
     game_objects_list.append(explosion)
+
 
 #   Copy the grass tile all over the level area
 for x in range(0, current_map.width):
@@ -67,7 +69,7 @@ for x in range(0, current_map.width):
         # Get the type of boxes
         box_type  = current_map.boxAt(x, y)
         # If the box type is not 0 (aka grass tile), create a box
-        if(box_type != 0):
+        if(box_type !=0):
             # Create a "Box" using the box_type, aswell as the x,y coordinates,
             # and the pymunk space
             box = gameobjects.get_box_with_type(x, y, box_type, space)
@@ -173,8 +175,8 @@ action_map2 = {
 
 # Edges for game map
 edges = [
-    pymunk.Segment(space.static_body, (0,0), (current_map.width, 0), 0.2),
-    pymunk.Segment(space.static_body, (0,0), (0, current_map.height), 0.2),
+    pymunk.Segment(space.static_body, (0, 0), (current_map.width, 0), 0.2),
+    pymunk.Segment(space.static_body, (0, 0), (0, current_map.height), 0.2),
     pymunk.Segment(space.static_body, (current_map.width, 0), (current_map.width, current_map.height), 0.2),
     pymunk.Segment(space.static_body, (0, current_map.height), (current_map.width, current_map.height), 0.2)
 ]
@@ -189,7 +191,7 @@ def collision_bullet_tank(arb, space, data):
     bullet = arb.shapes[0].parent
     tank = arb.shapes[1].parent
 
-    
+
     if bullet.shooter == tank or tank.is_protected:
         return False
     explosion()
@@ -198,7 +200,7 @@ def collision_bullet_tank(arb, space, data):
         space.remove(arb.shapes[0], arb.shapes[0].body)
     if tank in tanks_list:
         tank.respawn(flag)
-    
+
     vis_explosion(bullet)
 
     return False
@@ -207,7 +209,7 @@ def collision_bullet_box(arb, space, data):
 
     bullet = arb.shapes[0].parent
     box = arb.shapes[1].parent
-    
+
     if box in game_objects_list and box.destructable:
         wood_box()
         game_objects_list.remove(box)
@@ -259,7 +261,7 @@ while running:
                 tank.can_shoot = False
                 game_objects_list.append(tanks_list[1].shoot(space))
                 shooting_sound()
-            
+
     # -- Update physics
     if skip_update == 0:
         # Loop over all the game objects and update their speed in function of their
