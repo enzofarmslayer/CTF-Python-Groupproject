@@ -128,6 +128,7 @@ class Tank(GamePhysicsObject):
     ACCELERATION = 1.2
     NORMAL_MAX_SPEED = 1.5
     FLAG_MAX_SPEED = NORMAL_MAX_SPEED * 0.75
+    AI_VEL_MUL = 1.3
 
     def __init__(self, x, y, orientation, sprite, space, ai):
         super().__init__(x, y, orientation, sprite, space, True)
@@ -213,7 +214,7 @@ class Tank(GamePhysicsObject):
 
         # Makes sure that we dont exceed our speed limit
         if self.is_ai:
-            velocity = clamp((self.max_speed*1.3), self.body.velocity.length)
+            velocity = clamp((self.max_speed*self.AI_VEL_MUL), self.body.velocity.length)
         else:
             velocity = clamp(self.max_speed, self.body.velocity.length)
         self.body.velocity = pymunk.Vec2d(velocity, 0).rotated(self.body.velocity.angle)
@@ -221,7 +222,7 @@ class Tank(GamePhysicsObject):
         # Updates the rotation
         self.body.angular_velocity += self.rotation * self.ACCELERATION
         if self.is_ai:
-            self.body.angular_velocity = clamp((self.max_speed*1.3), self.body.angular_velocity)
+            self.body.angular_velocity = clamp((self.max_speed*self.AI_VEL_MUL), self.body.angular_velocity)
         else:
             self.body.angular_velocity = clamp(self.max_speed, self.body.angular_velocity)
 
@@ -296,6 +297,7 @@ class Bullet(GamePhysicsObject):
     ACCELERATION = 1
     acceleration = 1
     max_speed = 1
+    AI_BULLET_MUL = 1.5
     def __init__(self, tank:Tank, space):
         super().__init__(tank.body.position[0], tank.body.position[1], math.degrees(tank.body.angle), images.bullet, space, True)
         self.angle = tank.body.angle 
@@ -305,7 +307,7 @@ class Bullet(GamePhysicsObject):
 
     def update(self):
         if self.parrent_is_ai:
-            self.body.velocity = (pymunk.Vec2d(5*1.5, 0).rotated(self.angle + math.radians(90)))
+            self.body.velocity = (pymunk.Vec2d(5*self.AI_BULLET_MUL, 0).rotated(self.angle + math.radians(90)))
         else:
             self.body.velocity = (pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90)))
 
