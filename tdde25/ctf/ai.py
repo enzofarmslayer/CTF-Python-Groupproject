@@ -38,7 +38,7 @@ def periodic_difference_of_angles(angle1, angle2):
     elif diff < -math.pi:
         diff += 2 * math.pi
 
-    return diff 
+    return diff
 
 def periodic_difference_of_angles1(angle1, angle2):
     """ Compute the difference between two angles.

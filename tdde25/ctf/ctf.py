@@ -76,17 +76,19 @@ for x in range(0, current_map.width):
             game_objects_list.append(box)
 
 # Singleplayer or Multiplayer in command line
-if len(sys.argv) > 2:
-    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+# if len(sys.argv) > 2:
+#     raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
 
+singleplayer = True
+multiplayer = False
 if len(sys.argv) == 1 or sys.argv[1] == "--singleplayer":
     singleplayer = True
     multiplayer = False
 elif sys.argv[1] == "--hot-multiplayer":
     singleplayer = False
     multiplayer = True
-else:
-    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+# else:
+#     raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
 
 
 #-- Create the tanks
