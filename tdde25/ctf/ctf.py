@@ -8,21 +8,21 @@ import pymunk
 
 # ----- Initialisation ----- #
 
-# -- Initialise the sounds
+# Initialise the sounds
 
-# -- Initialise the display
+# Initialise the display
 pygame.init()
 pygame.display.set_mode()
 
-# -- Initialise the clock
+# Initialise the clock
 clock = pygame.time.Clock()
 
-# -- Initialise the physics engine
+# Initialise the physics engine
 space = pymunk.Space()
 space.gravity = (0.0, 0.0)
 space.damping = 0.1  # Adds friction to the ground for all objects
 
-# -- Import from the ctf framework
+# Import from the ctf framework
 # The framework needs to be imported after initialisation of pygame
 import ai
 import images
@@ -30,23 +30,22 @@ import gameobjects
 import maps
 import sys
 
-
-# -- Constants
+# Constants
 FRAMERATE = 50
 
-# -- Variables
-#   Define the current level
+# Variables
+# Define the current level
 current_map = maps.map0
-#   List of all game objects
+# List of all game objects
 game_objects_list = []
 tanks_list = []
 ai_list = []
 
-# -- Resize the screen to the size of the current level
+# Resize the screen to the size of the current level
 screen = pygame.display.set_mode(current_map.rect().size)
 
-#-- Generate the background
-background =pygame.Surface(screen.get_size())
+# Generate the background
+background = pygame.Surface(screen.get_size())
 
 
 def vis_explosion(bullet):
@@ -54,7 +53,7 @@ def vis_explosion(bullet):
     game_objects_list.append(explosion)
 
 
-#   Copy the grass tile all over the level area
+# Copy the grass tile all over the level area
 for x in range(0, current_map.width):
     for y in range(0,  current_map.height):
         # The call to the function "blit" will copy the image
@@ -62,37 +61,30 @@ for x in range(0, current_map.width):
         # image at the coordinates given as the second argument
         background.blit(images.grass,  (x*images.TILE_SIZE, y*images.TILE_SIZE))
 
-
-#-- Create the boxes
+# Create the boxes
 for x in range(0, current_map.width):
     for y in range(0,  current_map.height):
         # Get the type of boxes
-        box_type  = current_map.boxAt(x, y)
+        box_type = current_map.boxAt(x, y)
         # If the box type is not 0 (aka grass tile), create a box
-        if(box_type !=0):
+        if(box_type != 0):
             # Create a "Box" using the box_type, aswell as the x,y coordinates,
             # and the pymunk space
             box = gameobjects.get_box_with_type(x, y, box_type, space)
             game_objects_list.append(box)
 
-# Singleplayer or Multiplayer in command line
-# if len(sys.argv) > 2:
-#     raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
-
+# Singleplayer or hot-Multiplayer in command line
 singleplayer = True
-multiplayer = False
 if len(sys.argv) == 1 or sys.argv[1] == "--singleplayer":
     singleplayer = True
-    multiplayer = False
 elif sys.argv[1] == "--hot-multiplayer":
     singleplayer = False
-    multiplayer = True
-# else:
-#     raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+else:
+    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
 
 
-#-- Create the tanks
-if singleplayer == True:
+# Create the tanks
+if singleplayer:
     player_tank_index = 0
 else:
     player_tank_index = 1
@@ -110,12 +102,12 @@ for i in range(0, len(current_map.start_positions)):
         ai_list.append(ai_tank)
     else:
         tank = gameobjects.Tank(pos[0], pos[1], pos[2], images.tanks[i], space, False)
-    
+
     # Add the tank to the list of tanks
     tanks_list.append(tank)
 
 
-# <INSERT CREATE FLAG>
+# Create flag
 
 flag = gameobjects.Flag(current_map.flag_position[0], current_map.flag_position[1])
 game_objects_list.append(flag)
@@ -144,7 +136,7 @@ action_map = {
     },
     K_DOWN: {
         KEYDOWN: tanks_list[0].decelerate,
-         KEYUP: tanks_list[0].stop_moving
+        KEYUP: tanks_list[0].stop_moving
     },
     K_LEFT: {
         KEYDOWN: tanks_list[0].turn_left,
@@ -188,11 +180,11 @@ for edge in edges:
 for edge in edges:
     edge.collision_type = 4
 
+
 # Collisions
 def collision_bullet_tank(arb, space, data):
     bullet = arb.shapes[0].parent
     tank = arb.shapes[1].parent
-
 
     if bullet.shooter == tank or tank.is_protected:
         return False
@@ -206,6 +198,7 @@ def collision_bullet_tank(arb, space, data):
     vis_explosion(bullet)
 
     return False
+
 
 def collision_bullet_box(arb, space, data):
 
@@ -224,6 +217,7 @@ def collision_bullet_box(arb, space, data):
 
     return False
 
+
 def collision_bullet_border(arb, space, data):
     bullet = arb.shapes[0].parent
 
@@ -234,6 +228,7 @@ def collision_bullet_border(arb, space, data):
     vis_explosion(bullet)
 
     return False
+
 
 handler = space.add_collision_handler(1, 2)
 handler.pre_solve = collision_bullet_tank
@@ -295,12 +290,11 @@ while running:
 
     #   Update object that depends on an other object position (for instance a flag)
     for obj in game_objects_list:
-        obj.post_update() 
+        obj.post_update()
 
         if isinstance(obj, gameobjects.Explosion):
             if obj.disappear == True:
                 game_objects_list.remove(obj)
-
 
     # Display the background on the screen
     screen.blit(background, (0, 0))
@@ -311,7 +305,7 @@ while running:
 
     # Update the display of the tanks on the screen
     for tank in tanks_list:
-         tank.update_screen(screen)
+        tank.update_screen(screen)
 
     # Updating ai
     for tank_ai in ai_list:
