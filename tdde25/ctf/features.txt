@@ -1,0 +1,15 @@
+Respawn protection: When respawning, there is a short duration of which you cannot be hit by other tanks.​ 1,5
+
+Counting Score: Everytime a player captures the flag, a scoreboard is shown in the terminal displaying the amount of wins every player has.​1
+
+Sounds: The game contains different sound effects for various events along with a background track.​1
+
+Explosions: When a bullet collides, a visible explosion effect is shown.​ 2
+
+Read maps from a json file: When starting the game, you can choose which map to play.​ 2
+
+Unfair AI: The AI has an slight increase in both speed and bullet speed.​1
+
+Recoil: When shooting, the tank has recoil and gets pushed back.​ 2
+
+Hot seat multiplayer 1
