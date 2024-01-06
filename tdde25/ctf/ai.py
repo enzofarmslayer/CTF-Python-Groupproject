@@ -40,6 +40,7 @@ def periodic_difference_of_angles(angle1, angle2):
 
     return diff
 
+
 def periodic_difference_of_angles1(angle1, angle2):
     """ Compute the difference between two angles.
     """
@@ -99,11 +100,11 @@ class Ai:
         res = ray.shape
         if isinstance(res, pymunk.Segment):
             return
-        if isinstance(res.parent, gameobjects.Tank) and self.tank.can_shoot == True:
+        if isinstance(res.parent, gameobjects.Tank) and self.tank.can_shoot is True:
             self.tank.can_shoot = False
             self.game_objects_list.append(self.tank.shoot(self.space))
         if isinstance(res.parent, gameobjects.Box):
-            if res.parent.destructable and self.tank.can_shoot == True:
+            if res.parent.destructable and self.tank.can_shoot is True:
                 self.tank.can_shoot = False
                 self.game_objects_list.append(self.tank.shoot(self.space))
 
@@ -122,9 +123,9 @@ class Ai:
             # if self.grid_pos == self.get_tile_of_position(self.tank.start_position):
             #     shortest_path.popleft()
             next_coord = shortest_path.popleft()
-            
+
             yield
-            if self.tank.has_respawned == True:
+            if self.tank.has_respawned is True:
                 self.update_grid_pos()
                 self.tank.stop_moving()
                 shortest_path = self.find_shortest_path()
@@ -137,9 +138,8 @@ class Ai:
             while not self.correct_angle(next_coord):
                 yield
             self.accelerate()
-            while not self.correct_pos(next_coord) and self.tank.has_respawned == False:
+            while not self.correct_pos(next_coord) and self.tank.has_respawned is False:
                 yield
- 
 
     def find_shortest_path(self):
         """ A simple Breadth First Search using integer coordinates as our nodes.
@@ -164,7 +164,6 @@ class Ai:
                     visited.add(i)
                     paths[i] = queue[0]
             queue.popleft()
-
 
         shortest_path = []
         default = self.get_target_tile()
@@ -222,8 +221,8 @@ class Ai:
         x_coords = coord_vec[0]
         y_coords = coord_vec[1]
 
-        neighbors = [(x_coords + 1, y_coords),(x_coords + -1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
-        
+        neighbors = [(x_coords + 1, y_coords),(x_coords - 1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
+
         result = filter(self.filter_tile_neighbors, neighbors)  # This is your filter object
         result_list = list(result)  # Convert filter object to a list
 
@@ -239,7 +238,7 @@ class Ai:
                 return False
             else:
                 return True
-            
+
     def turn(self, next_coord):
         desired_angle = angle_between_vectors(self.tank.body.position, next_coord)
         angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
@@ -252,12 +251,11 @@ class Ai:
             else:
                 self.tank.turn_left()
         return False
-    
+
     def correct_pos(self, next_coord):
         desired_pos = next_coord
         current_pos = self.tank.body.position
-        threshold = 0.2
-        
+
         if (desired_pos - current_pos).length > self.prev_coord:
             self.update_grid_pos()
             self.tank.stop_moving()
@@ -266,7 +264,7 @@ class Ai:
         else:
             self.prev_coord = (desired_pos - current_pos).length
             return False
-        
+
     def correct_angle(self, next_coord):
         desired_angle = angle_between_vectors(self.tank.body.position, next_coord)
         angle_diff = periodic_difference_of_angles(self.tank.body.angle, desired_angle)
@@ -279,7 +277,7 @@ class Ai:
             return True
         else:
             return False
-        
+
     def accelerate(self):
         self.tank.accelerate()
         return

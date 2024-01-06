@@ -75,12 +75,12 @@ for x in range(0, current_map.width):
 
 # Singleplayer or hot-Multiplayer in command line
 singleplayer = True
-if len(sys.argv) == 1 or sys.argv[1] == "--singleplayer":
+multiplayer = False
+if sys.argv[1] == "--singleplayer":
     singleplayer = True
 elif sys.argv[1] == "--hot-multiplayer":
     singleplayer = False
-else:
-    raise Exception("Wrong command start in command line, --singelplayer || --hot-multiplayer")
+    multiplayer = True
 
 
 # Create the tanks
