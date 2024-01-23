@@ -221,7 +221,7 @@ class Ai:
         x_coords = coord_vec[0]
         y_coords = coord_vec[1]
 
-        neighbors = [(x_coords + 1, y_coords),(x_coords - 1, y_coords),(x_coords, y_coords + 1),(x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
+        neighbors = [(x_coords + 1, y_coords), (x_coords - 1, y_coords), (x_coords, y_coords + 1), (x_coords, y_coords - 1)]  # Find the coordinates of the tiles' four neighbors
 
         result = filter(self.filter_tile_neighbors, neighbors)  # This is your filter object
         result_list = list(result)  # Convert filter object to a list

@@ -3,6 +3,7 @@ import pygame
 import argparse
 import json
 
+
 class Map:
     """ An instance of Map is a blueprint for how the game map will look. """
 
@@ -22,7 +23,8 @@ class Map:
     def boxAt(self, x, y):
         """ Return the type of the box at coordinates (x, y). """
         return self.boxes[y][x]
-    
+
+
 # Create the parser
 parser = argparse.ArgumentParser(description="Fetch given JSON file and turn it into python code")
 # Add an argument for the JSON file
