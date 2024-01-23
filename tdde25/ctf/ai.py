@@ -28,8 +28,8 @@ def angle_between_vectors(vec1, vec2):
 def periodic_difference_of_angles(angle1, angle2):
     """ Compute the difference between two angles.
     """
-    angle1 = ((angle1 + math.pi) % (2*math.pi)) - math.pi
-    angle2 = ((angle2 + math.pi) % (2*math.pi)) - math.pi
+    angle1 = ((angle1 + math.pi) % (2 * math.pi)) - math.pi
+    angle2 = ((angle2 + math.pi) % (2 * math.pi)) - math.pi
 
     diff = angle2 - angle1
 
@@ -84,7 +84,7 @@ class Ai:
         """
         distance = 0.2
         mid = self.tank.body.position
-        angle = self.tank.body.angle + math.pi/2
+        angle = self.tank.body.angle + math.pi / 2
 
         start_y = mid[1] + distance + math.sin(angle)
         start_x = mid[0] + distance + math.cos(angle)

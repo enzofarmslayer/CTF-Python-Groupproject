@@ -55,15 +55,15 @@ def vis_explosion(bullet):
 
 # Copy the grass tile all over the level area
 for x in range(0, current_map.width):
-    for y in range(0,  current_map.height):
+    for y in range(0, current_map.height):
         # The call to the function "blit" will copy the image
         # contained in "images.grass" into the "background"
         # image at the coordinates given as the second argument
-        background.blit(images.grass,  (x*images.TILE_SIZE, y*images.TILE_SIZE))
+        background.blit(images.grass, (x * images.TILE_SIZE, y * images.TILE_SIZE))
 
 # Create the boxes
 for x in range(0, current_map.width):
-    for y in range(0,  current_map.height):
+    for y in range(0, current_map.height):
         # Get the type of boxes
         box_type = current_map.boxAt(x, y)
         # If the box type is not 0 (aka grass tile), create a box
@@ -247,14 +247,14 @@ while running:
             running = False
         elif event.type in [KEYDOWN, KEYUP] and event.key in action_map and event.type in action_map[event.key]:
             action_map[event.key][event.type]()
-        elif event.type == KEYDOWN and event.key == K_p and tank.can_shoot == True:
+        elif event.type == KEYDOWN and event.key == K_p and tank.can_shoot is True:
             tank.can_shoot = False
             game_objects_list.append(tanks_list[0].shoot(space))
             shooting_sound()
-        if multiplayer == True:
+        if multiplayer is True:
             if event.type in [KEYDOWN, KEYUP] and event.key in action_map2 and event.type in action_map2[event.key]:
                 action_map2[event.key][event.type]()
-            elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot == True:
+            elif event.type == KEYDOWN and event.key == K_SPACE and tank.can_shoot is True:
                 tank.can_shoot = False
                 game_objects_list.append(tanks_list[1].shoot(space))
                 shooting_sound()
@@ -293,7 +293,7 @@ while running:
         obj.post_update()
 
         if isinstance(obj, gameobjects.Explosion):
-            if obj.disappear == True:
+            if obj.disappear is True:
                 game_objects_list.remove(obj)
 
     # Display the background on the screen

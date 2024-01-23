@@ -257,7 +257,7 @@ class Bullet(GamePhysicsObject):
 
     def update(self):
         if self.parrent_is_ai:
-            self.body.velocity = (pymunk.Vec2d(5*self.AI_BULLET_MUL, 0).rotated(self.angle + math.radians(90)))
+            self.body.velocity = (pymunk.Vec2d(5 * self.AI_BULLET_MUL, 0).rotated(self.angle + math.radians(90)))
         else:
             self.body.velocity = (pymunk.Vec2d(5, 0).rotated(self.angle + math.radians(90)))
 
